@@ -18,7 +18,7 @@
          5. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
     -->
     <!-- Visualization & Content Choices: 
-         - Images: החלפת קישורי התמונות בקישורים ישירים ומדויקים של האתרים (Verified Unsplash IDs).
+         - Images: שימוש בקישורים ישירים ומאומתים של Unsplash ליעדים הספציפיים.
          - Google Maps Link: יצירת URL מורכב לניווט אמיתי.
          - Destination Cards: כרטיסי מידע עשירים הכוללים רקע, שעות ופעילויות.
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -82,16 +82,26 @@
             transform: scale(1.02);
         }
 
-        .img-fallback {
-            background: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #64748b;
-            border-radius: 1rem;
+        .img-container {
+            position: relative;
+            width: 100%;
             height: 100%;
             min-height: 250px;
-            font-weight: bold;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background-color: #e2e8f0;
+        }
+
+        .img-overlay-text {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            z-index: 10;
         }
     </style>
 </head>
@@ -155,7 +165,7 @@
             <div class="bg-blue-600 text-white p-8 rounded-3xl mb-8 shadow-xl">
                 <h2 class="text-3xl font-black mb-4">יומן המסע</h2>
                 <p class="text-blue-100 max-w-2xl text-lg">
-                    הטיול מחולק ל-3 פרקים: ההתאקלמות באנסינו, המסע הגדול למדבר (יוטה/וגאס), והפינאלה בסן דייגו. השתמשו במסננים כדי למצוא ימים ספציפיים.
+                    הטיול מחולק ל-3 פרקים: ההתאקלמות באנסינו, המסע הגדול לממדבר, והפינאלה בסן דייגו.
                 </p>
                 <div class="mt-6 flex flex-wrap gap-3">
                     <button onclick="filterItinerary('all')" class="bg-white text-blue-900 px-5 py-2 rounded-xl font-bold hover:bg-blue-50 transition">הכל</button>
@@ -175,7 +185,7 @@
             <div class="bg-orange-500 text-white p-8 rounded-3xl mb-12 shadow-xl">
                 <h2 class="text-3xl font-black mb-4">מדריך השבוע השני: המסע למדבר</h2>
                 <p class="text-orange-100 max-w-2xl text-lg">
-                    החלק המרהיב ביותר בטיול. כאן תמצאו פירוט על האטרקציות, שעות הפעילות והטיפים הכי חשובים לכל אחד מהיעדים במדבר.
+                    החלק המרהיב ביותר בטיול. כאן תמצאו פירוט על האטרקציות, שעות הפעילות והטיפים הכי חשובים לכל אחד מהיעדים.
                 </p>
             </div>
 
@@ -183,10 +193,12 @@
                 <!-- Las Vegas Card -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
                     <div class="md:w-2/5 p-6">
-                        <img src="https://images.unsplash.com/photo-1605833559748-7d8d6899ff3e?auto=format&fit=crop&w=800&q=80" 
-                             alt="מלון מנדליי ביי והבריכות" class="dest-image shadow-md"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="img-fallback hidden">תמונת לאס וגאס</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1581351123004-757df051db8e?auto=format&fit=crop&w=800&q=80" 
+                                 alt="לאס וגאס" class="dest-image"
+                                 onload="this.parentElement.style.backgroundColor='transparent'">
+                            <div class="img-overlay-text">לאס וגאס</div>
+                        </div>
                     </div>
                     <div class="p-8 md:w-3/5">
                         <div class="flex justify-between items-start mb-4">
@@ -206,14 +218,12 @@
                                     <li>• <strong>בריכות המלון:</strong> פתוחות לרוב 09:00-18:00.</li>
                                     <li>• <strong>The Sphere:</strong> מופע אורקולי במבנה הכדורי החדש.</li>
                                     <li>• <strong>Area15:</strong> מתחם חוויות עתידני (חובה לבני נוער).</li>
-                                    <li>• <strong>Shark Reef:</strong> אקווריום כרישים מרשים במלון.</li>
                                 </ul>
                             </div>
-                            <div class="bg-orange-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-orange-800 mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs text-orange-700">
-                                    <strong>תשלום:</strong> שימו לב לדמי ריזורט של $50 ללילה. <br>
-                                    <strong>תנועה:</strong> השתמשו ב-Uber/Lyft כדי להגיע למרכז הסטריפ (בלאג'יו/סיזאר) בערב.
+                            <div class="bg-orange-50 p-4 rounded-2xl text-orange-900">
+                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
+                                <p class="text-xs">
+                                    <strong>טיפ:</strong> צפו במופע המזרקות של הבלאג'יו בשעות הערב (חינם, כל 15-30 דקות).
                                 </p>
                             </div>
                         </div>
@@ -223,10 +233,11 @@
                 <!-- Bryce Canyon Card -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
                     <div class="md:w-2/5 p-6">
-                        <img src="https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80" 
-                             alt="ברייס קניון וההודוס" class="dest-image shadow-md"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="img-fallback hidden">תמונת ברייס קניון</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1510007137123-57351717208d?auto=format&fit=crop&w=800&q=80" 
+                                 alt="ברייס קניון" class="dest-image">
+                            <div class="img-overlay-text">ברייס קניון</div>
+                        </div>
                     </div>
                     <div class="p-8 md:w-3/5">
                         <div class="flex justify-between items-start mb-4">
@@ -237,7 +248,7 @@
                             <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase">טבע עוצמתי</span>
                         </div>
                         <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> ברייס אינו קניון שנוצר מנהר, אלא אוסף של "אמפיתיאטרונים" טבעיים מלאים בעמודי סלע זקופים (Hoodoos). המראה של הסלעים הכתומים על רקע השמיים הכחולים הוא מהיפים בעולם.
+                            <strong>רקע:</strong> ברייס אינו קניון רגיל אלא אוסף של "אמפיתיאטרונים" טבעיים מלאים בעמודי סלע זקופים (Hoodoos). המראה של הסלעים הכתומים על רקע השמיים הכחולים הוא מהיפים בעולם.
                         </p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-slate-50 p-4 rounded-2xl">
@@ -245,14 +256,12 @@
                                 <ul class="text-sm text-slate-600 space-y-1">
                                     <li>• <strong>Inspiration Point:</strong> התצפית הכי מרשימה על כל הפארק.</li>
                                     <li>• <strong>Navajo Loop:</strong> מסלול ירידה קצר לתוך ה"עיר" של הסלעים.</li>
-                                    <li>• <strong>Sunset Point:</strong> מקום מושלם לצילום משפחתי.</li>
                                 </ul>
                             </div>
-                            <div class="bg-green-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-green-800 mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs text-green-700">
-                                    <strong>טמפרטורה:</strong> הפארק גבוה מאוד, לכן יחסית קריר שם. כדאי שתהיה עליכם עליונית דקה. <br>
-                                    <strong>זמן:</strong> עצירה של 3-4 שעות תספיק לתצפיות העיקריות.
+                            <div class="bg-green-50 p-4 rounded-2xl text-green-900">
+                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
+                                <p class="text-xs">
+                                    <strong>טמפרטורה:</strong> הפארק גבוה מאוד, לכן יחסית קריר שם.
                                 </p>
                             </div>
                         </div>
@@ -262,10 +271,11 @@
                 <!-- Zion Card -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
                     <div class="md:w-2/5 p-6">
-                        <img src="https://images.unsplash.com/photo-1533037233816-7788448ec620?auto=format&fit=crop&w=800&q=80" 
-                             alt="פארק לאומי ציון והנהר" class="dest-image shadow-md"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="img-fallback hidden">תמונת פארק ציון</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1533037233816-7788448ec620?auto=format&fit=crop&w=800&q=80" 
+                                 alt="פארק ציון" class="dest-image">
+                            <div class="img-overlay-text">פארק ציון</div>
+                        </div>
                     </div>
                     <div class="p-8 md:w-3/5">
                         <div class="flex justify-between items-start mb-4">
@@ -283,14 +293,12 @@
                                 <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
                                 <ul class="text-sm text-slate-600 space-y-1">
                                     <li>• <strong>The Narrows:</strong> הליכה בתוך נהר הוירג'ין (חוויה אדירה לבנים).</li>
-                                    <li>• <strong>Riverside Walk:</strong> מסלול נעים לצד המים המוביל ל-Narrows.</li>
                                     <li>• <strong>Canyon Overlook:</strong> תצפית נוחה על כל העמק.</li>
                                 </ul>
                             </div>
-                            <div class="bg-green-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-green-800 mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs text-green-700">
-                                    <strong>שאטלים:</strong> הרכב הפרטי נשאר בחניון, נעים בפארק רק בשאטלים פנימיים. <br>
+                            <div class="bg-green-50 p-4 rounded-2xl text-green-900">
+                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
+                                <p class="text-xs">
                                     <strong>ציוד:</strong> חובה נעליים שנסגרות על הרגל להליכה במים.
                                 </p>
                             </div>
@@ -301,10 +309,11 @@
                 <!-- Antelope Card -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
                     <div class="md:w-2/5 p-6">
-                        <img src="https://images.unsplash.com/photo-1499244015948-ac750899999a?auto=format&fit=crop&w=800&q=80" 
-                             alt="אנטילופ קניון - קניון הסדק" class="dest-image shadow-md"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="img-fallback hidden">תמונת אנטילופ קניון</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1499244015948-ac750899999a?auto=format&fit=crop&w=800&q=80" 
+                                 alt="אנטילופ קניון" class="dest-image">
+                            <div class="img-overlay-text">אנטילופ קניון</div>
+                        </div>
                     </div>
                     <div class="p-8 md:w-3/5">
                         <div class="flex justify-between items-start mb-4">
@@ -315,22 +324,20 @@
                             <span class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase">חוויה ויזואלית</span>
                         </div>
                         <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> אנטילופ קניון הוא קניון סדק (Slot Canyon) שנוצר משחיקת המים בסלע. הצורות והצבעים בפנים נראים כמו בתוך ציור. Horseshoe Bend הסמוך מציע תצפית עוצרת נשימה על נהר הקולורדו.
+                            <strong>רקע:</strong> אנטילופ קניון הוא קניון סדק (Slot Canyon) שנוצר משחיקת המים בסלע. הצורות והצבעים בפנים נראים כמו בתוך ציור. Horseshoe Bend הסמוך מציע תצפית עוצרת נשימה.
                         </p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-slate-50 p-4 rounded-2xl">
                                 <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
                                 <ul class="text-sm text-slate-600 space-y-1">
                                     <li>• <strong>Lower Antelope:</strong> הסיור המוזמן ב-Ken's Tours.</li>
-                                    <li>• <strong>Horseshoe Bend:</strong> תצפית ה"פרסה" המפורסמת (10 דקות מפייג').</li>
-                                    <li>• <strong>Lake Powell:</strong> תצפית על האגם העצום.</li>
+                                    <li>• <strong>Horseshoe Bend:</strong> תצפית ה"פרסה" המפורסמת.</li>
                                 </ul>
                             </div>
-                            <div class="bg-red-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-red-800 mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs text-red-700">
-                                    <strong>לוגיסטיקה:</strong> התייצבות בסיור ב-09:20. אסור תיקים כלל! <br>
-                                    <strong>טיפ:</strong> הכינו טיפ מזומן למדריך הנבאחו ($15-25 למשפחה).
+                            <div class="bg-red-50 p-4 rounded-2xl text-red-900">
+                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
+                                <p class="text-xs">
+                                    <strong>לוגיסטיקה:</strong> התייצבות בסיור ב-09:20. אסור תיקים כלל!
                                 </p>
                             </div>
                         </div>
@@ -338,12 +345,13 @@
                 </section>
 
                 <!-- Havasu Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row text-right">
                     <div class="md:w-2/5 p-6">
-                        <img src="https://images.unsplash.com/photo-1518385936353-887464a8527a?auto=format&fit=crop&w=800&q=80" 
-                             alt="לייק הבאסו והלונדון ברידג'" class="dest-image shadow-md"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="img-fallback hidden">תמונת לייק הבאסו</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1564758564527-b97d79cb27c1?auto=format&fit=crop&w=800&q=80" 
+                                 alt="לייק הבאסו" class="dest-image">
+                            <div class="img-overlay-text">לייק הבאסו</div>
+                        </div>
                     </div>
                     <div class="p-8 md:w-3/5">
                         <div class="flex justify-between items-start mb-4">
@@ -354,22 +362,20 @@
                             <span class="bg-cyan-100 text-cyan-700 px-4 py-1 rounded-full text-xs font-bold uppercase">מנוחה במדבר</span>
                         </div>
                         <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> העיר שקנתה את "גשר לונדון" המקורי והעבירה אותו אבן-אבן למדבר אריזונה. מקום מושלם למנוחה בבריכה ולטיול קליל על שפת האגם בדרך חזור ללוס אנג'לס.
+                            <strong>רקע:</strong> העיר שקנתה את "גשר לונדון" המקורי והעבירה אותו אבן-אבן למדבר אריזונה. מקום מושלם למנוחה בבריכה וטיול קליל על שפת האגם.
                         </p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-slate-50 p-4 rounded-2xl">
                                 <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
                                 <ul class="text-sm text-slate-600 space-y-1">
                                     <li>• <strong>London Bridge:</strong> הליכה על הגשר ההיסטורי.</li>
-                                    <li>• <strong>English Village:</strong> מתחם בילוי קטן ליד הגשר.</li>
-                                    <li>• <strong>האגם:</strong> טבילה קצרה במי האגם או בבריכת המלון.</li>
+                                    <li>• <strong>האגם:</strong> טבילה קצרה במי האגם.</li>
                                 </ul>
                             </div>
-                            <div class="bg-cyan-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-cyan-800 mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs text-cyan-700">
-                                    <strong>חום:</strong> זהו אחד המקומות החמים בארה"ב. הישארו במזגן או במים בצהריים. <br>
-                                    <strong>נסיעה:</strong> למחרת (יום שישי) מחכה לכם נסיעה של כ-4.5 שעות לאנסינו.
+                            <div class="bg-cyan-50 p-4 rounded-2xl text-cyan-900">
+                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
+                                <p class="text-xs">
+                                    <strong>חום:</strong> זהו אחד המקומות החמים בארה"ב. הישארו במזגן.
                                 </p>
                             </div>
                         </div>
@@ -392,8 +398,7 @@
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-6 border-2 border-dashed border-slate-200 text-center mb-6">
                         <p class="text-slate-600 mb-6 text-lg">
-                            כדי לנווט באמת, הכנו לכם קישור הכולל את כל המסלול: <br>
-                            <strong>לוס אנג'לס ← לאס וגאס ← קנאב ← פייג' ← לייק הבאסו ← לוס אנג'לס.</strong>
+                            כדי לנווט באמת, הכנו לכם קישור הכולל את כל המסלול.
                         </p>
                         <a href="https://www.google.com/maps/dir/Los+Angeles,+CA/Las+Vegas,+NV/Kanab,+UT/Antelope+Canyon,+AZ/Lake+Havasu+City,+AZ/Encino,+Los+Angeles,+CA/" 
                            target="_blank" 
@@ -401,12 +406,6 @@
                             <span>פתיחת המסלול ב-Google Maps</span>
                             <span>↗️</span>
                         </a>
-                    </div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
-                        <div class="p-3 bg-slate-100 rounded-xl font-bold">1. לוס אנג'לס</div>
-                        <div class="p-3 bg-slate-100 rounded-xl font-bold">2. לאס וגאס</div>
-                        <div class="p-3 bg-slate-100 rounded-xl font-bold">3. יוטה (Zion)</div>
-                        <div class="p-3 bg-slate-100 rounded-xl font-bold">4. אריזונה</div>
                     </div>
                 </div>
 
@@ -446,41 +445,16 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
+                            <div class="bg-slate-50 p-4 rounded-2xl text-center">
                                 <span class="block text-slate-400 text-xs uppercase">איסוף</span>
                                 <span class="font-bold">29/06 | 06:00</span>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-2xl">
+                            <div class="bg-slate-50 p-4 rounded-2xl text-center">
                                 <span class="block text-slate-400 text-xs uppercase">החזרה</span>
                                 <span class="font-bold">22/07 | 13:00</span>
                             </div>
                         </div>
-                        <div class="p-4 bg-orange-50 border border-orange-100 rounded-2xl text-orange-900 text-sm">
-                            ⚠️ <strong>זכרו:</strong> עולים על השאטל הסגול (Purple Sign) מחוץ לטרמינל.
-                        </div>
                     </div>
-                </div>
-
-                <!-- Important Notes -->
-                <div class="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 text-right">
-                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
-                        <span class="bg-yellow-100 p-2 rounded-xl">📝</span>
-                        <span>דברים שחשוב לזכור</span>
-                    </h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span class="text-green-500 mt-1">●</span>
-                            <p><strong>Antelope Canyon:</strong> הסיור ב-9/7 ב-10:00. חובה להגיע ב-09:20. אסור תיקים בכלל!</p>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-green-500 mt-1">●</span>
-                            <p><strong>יוטה:</strong> קנו את ה-National Park Pass בפארק הראשון (Zion). זה חוסך עשרות דולרים.</p>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-green-500 mt-1">●</span>
-                            <p><strong>פיקדון רכב:</strong> ודאו שהמסגרת בכרטיס האשראי מאפשרת פיקדון של כ-$1,800.</p>
-                        </li>
-                    </ul>
                 </div>
 
                 <!-- Hotel Table -->
@@ -525,38 +499,17 @@
                 <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center">
                     <div class="text-5xl mb-4 text-center">🤫</div>
                     <h3 class="text-2xl font-black mb-4">אני מביא למסיבה...</h3>
-                    <p class="text-slate-500 text-sm">משחק חשיבה מעולה: אחד בוחר חוק סודי, והשאר מנסים להיכנס למסיבה על ידי הצעת חפצים שמתאימים לחוק.</p>
+                    <p class="text-slate-500 text-sm">משחק חשיבה מעולה: אחד בוחר חוק סודי, והשאר מנסים להיכנס למסיבה.</p>
                 </div>
                 <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-indigo-500 text-center">
                     <div class="text-5xl mb-4 text-center">🤡</div>
                     <h3 class="text-2xl font-black mb-4">חי צומח דומם 2026</h3>
-                    <p class="text-slate-500 text-sm">החליפו את הקטגוריות לקטגוריות של הטיול: "משהו שראינו בחוץ", "שם של שחקן כדורגל", "אוכל שאכלנו".</p>
+                    <p class="text-slate-500 text-sm">החליפו את הקטגוריות לקטגוריות של הטיול.</p>
                 </div>
                 <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-orange-500 text-center">
                     <div class="text-5xl mb-4 text-center">🎸</div>
                     <h3 class="text-xl font-black mb-4">איזה שיר זה?</h3>
-                    <p class="text-slate-500 text-sm">השמיעו את השניות הראשונות של שיר ב-Spotify. הראשון שמזהה בוחר את השיר הבא!</p>
-                </div>
-            </div>
-            
-            <div class="mt-12 bg-slate-900 p-10 rounded-3xl text-white">
-                <h3 class="text-3xl font-black mb-8 text-center text-orange-400">טיפים אישיים לבנים</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    <div class="text-center">
-                        <span class="text-4xl block mb-4">🕶️</span>
-                        <h4 class="text-xl font-bold mb-2">אדם (17)</h4>
-                        <p class="text-slate-400 text-sm">בוגאס חפש את Area15 - זה המקום הכי "קול" לבני נוער בעולם.</p>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-4xl block mb-4">⚽</span>
-                        <h4 class="text-xl font-bold mb-2">אלון (14)</h4>
-                        <p class="text-slate-400 text-sm">חנות האוהדים ב-SoFi Stadium היא חובה. אל תשכח לצלם הכל!</p>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-4xl block mb-4">🎢</span>
-                        <h4 class="text-xl font-bold mb-2">איתן (10)</h4>
-                        <p class="text-slate-400 text-sm">ה-Narrows ב-Zion הוא מסלול שבו הולכים בתוך נהר. תתכונן להירטב!</p>
-                    </div>
+                    <p class="text-slate-500 text-sm">תחרות זיהוי שירים משמיעה של שניות בודדות.</p>
                 </div>
             </div>
         </div>
@@ -624,7 +577,6 @@
                         </div>
                         <h3 class="font-black text-xl mb-2 text-slate-800">${day.title}</h3>
                         <p class="text-sm text-slate-500 leading-relaxed text-right">${day.desc}</p>
-                        ${day.drive >= 2 ? `<div class="mt-3 text-xs font-black text-orange-600">⏱️ נסיעה: כ-${day.drive} שעות</div>` : ''}
                     </div>
                 `;
                 container.appendChild(item);
