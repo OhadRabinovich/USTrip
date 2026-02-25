@@ -10,18 +10,18 @@
     
     <!-- Chosen Palette: Modern Adventure (Deep Blue, Sunset Orange, Desert Sand) -->
     <!-- Application Structure Plan: 
-         האפליקציה בנויה כלוח בקרה אינטראקטיבי המחולק לארבעה אזורים: 
+         האפליקציה בנויה כלוח בקרה אינטראקטיבי המחולק לחמישה אזורים: 
          1. לו"ז מפורט: ציר זמן ויזואלי עם מסננים.
-         2. מפות ונתונים: חיבור למפות גוגל וניתוח שעות נהיגה.
-         3. לוגיסטיקה: ריכוז הזמנות רכב ומלונות.
-         4. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
-         הוספתי קישור ישיר ל-Google Maps כדי לפתור את בעיית המפה הלא-פעילה בגרסה הקודמת.
+         2. מדריך שבוע 2: הרחבה על יעדי המדבר (רקע, אטרקציות, שעות).
+         3. מפות ונתונים: חיבור למפות גוגל וניתוח שעות נהיגה.
+         4. לוגיסטיקה: ריכוז הזמנות רכב ומלונות.
+         5. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
     -->
     <!-- Visualization & Content Choices: 
-         - Google Maps Link: יצירת URL מורכב הכולל את כל תחנות הטיול לצורך ניווט אמיתי.
-         - Doughnut Chart: חלוקת סוגי הפעילות (עירוני, טבע, נסיעות).
-         - Bar Chart: השוואת זמני נהיגה בין הימים האינטנסיביים.
-         - Timeline Cards: כרטיסים נקיים עם אייקונים משתנים לפי סוג היום.
+         - Google Maps Link: יצירת URL מורכב לניווט אמיתי.
+         - Destination Cards: כרטיסי מידע עשירים הכוללים רקע, שעות ופעילויות.
+         - Doughnut Chart: חלוקת סוגי הפעילות.
+         - Bar Chart: השוואת זמני נהיגה.
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <style>
@@ -69,9 +69,22 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .img-placeholder {
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 0.875rem;
+            border-radius: 1rem;
+            height: 12rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-right">
 
     <!-- Header -->
     <header class="bg-slate-900 text-white shadow-2xl relative overflow-hidden">
@@ -107,6 +120,9 @@
                 <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn tab-active py-5 px-4 whitespace-nowrap transition-all">
                     📅 תוכנית יומית
                 </button>
+                <button onclick="switchTab('week2')" id="tab-week2" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
+                    🗺️ מדריך שבוע 2
+                </button>
                 <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
                     🌍 מפה ונתונים
                 </button>
@@ -140,15 +156,217 @@
 
             <div class="relative space-y-8" id="timeline-container">
                 <div class="timeline-line"></div>
-                <!-- JS Populates this -->
             </div>
         </div>
 
-        <!-- VIEW 2: MAP & STATS -->
+        <!-- VIEW 2: WEEK 2 GUIDE -->
+        <div id="view-week2" class="view-section hidden animate-fade">
+            <div class="bg-orange-500 text-white p-8 rounded-3xl mb-12 shadow-xl">
+                <h2 class="text-3xl font-black mb-4">מדריך השבוע השני: המסע למדבר</h2>
+                <p class="text-orange-100 max-w-2xl text-lg">
+                    החלק הכי אינטנסיבי ומרגש בטיול. כאן תמצאו הרחבה על כל יעד בשבוע שבין ה-5/7 ל-10/7.
+                </p>
+            </div>
+
+            <div class="space-y-16">
+                <!-- Las Vegas Card -->
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                    <div class="md:w-1/3">
+                        <div class="img-placeholder m-6 h-64 md:h-full">
+                            
+                        </div>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-3xl font-black text-slate-800">לאס וגאס (Mandalay Bay)</h3>
+                                <p class="text-orange-600 font-bold">5-7 ביולי</p>
+                            </div>
+                            <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold uppercase">עירוני & בילויים</span>
+                        </div>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            <strong>רקע:</strong> מנדליי ביי ממוקם בדרום ה"סטריפ" והוא אחד המלונות היחידים שמציעים חוויית נופש אמיתית למשפחות. המלון מפורסם ב"חוף" הענק שלו שכולל חול אמיתי ובריכת גלים.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות מרכזיות:</h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    <li>• <strong>Mandalay Bay Beach:</strong> נהר עצל ובריכת גלים (09:00-18:00).</li>
+                                    <li>• <strong>Shark Reef Aquarium:</strong> אקווריום עם כרישים וצבי ים (10:00-20:00).</li>
+                                    <li>• <strong>The Sphere:</strong> המבנה הכדורי הכי מתקדם בעולם (מרחק Uber קצר).</li>
+                                    <li>• <strong>Area15:</strong> מתחם אמנות וטכנולוגיה עתידני (חובה לבנים!).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">🕒 מידע שימושי:</h4>
+                                <p class="text-xs text-slate-500">
+                                    <strong>דמי ריזורט:</strong> כ-$50 ללילה. <br>
+                                    <strong>טיפ:</strong> צפו במופע המזרקות של הבלאג'יו בשעות הערב (חינם, כל 15-30 דקות).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bryce Canyon Card -->
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
+                    <div class="md:w-1/3">
+                        <div class="img-placeholder m-6 h-64 md:h-full">
+                            
+                        </div>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-3xl font-black text-slate-800">ברייס קניון (Utah)</h3>
+                                <p class="text-orange-600 font-bold">7 ביולי (עצירה בדרך)</p>
+                            </div>
+                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase">טבע עוצמתי</span>
+                        </div>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            <strong>רקע:</strong> ברייס הוא לא קניון רגיל אלא "אמפיתיאטרון" של עמודי סלע כתומים הנקראים Hoodoos. זהו אחד הפארקים הכי יפים לצילום בגלל הניגוד בין הסלעים לבין העצים והשמיים הכחולים.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות מרכזיות:</h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    <li>• <strong>Sunset Point:</strong> התצפית הכי מפורסמת על הפארק.</li>
+                                    <li>• <strong>Navajo Loop:</strong> מסלול ירידה לתוך הקניון (כשעה-שעתיים).</li>
+                                    <li>• <strong>Inspiration Point:</strong> תצפית רחבה על כל ה"עיר" של הסלעים.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">🕒 מידע שימושי:</h4>
+                                <p class="text-xs text-slate-500">
+                                    <strong>שעות:</strong> פתוח 24 שעות. <br>
+                                    <strong>מרכז מבקרים:</strong> 08:00-20:00 (בקיץ). <br>
+                                    <strong>טמפרטורה:</strong> גובה הפארק רב, לכן קריר יותר מאשר בוגאס.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Zion Card -->
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                    <div class="md:w-1/3">
+                        <div class="img-placeholder m-6 h-64 md:h-full">
+                            
+                        </div>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-3xl font-black text-slate-800">פארק לאומי ציון (Zion)</h3>
+                                <p class="text-orange-600 font-bold">8 ביולי (יום מלא)</p>
+                            </div>
+                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase">טבע & מים</span>
+                        </div>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            <strong>רקע:</strong> פארק ציון הוא עמק עמוק וצר עם צוקי אבן חול אדומים המתנשאים לגובה של מאות מטרים. זהו גן עדן לחובבי טיולים רגליים והרפתקאות.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות מרכזיות:</h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    <li>• <strong>The Narrows:</strong> הליכה בתוך נהר הוירג'ין (חובה נעליים מתאימות).</li>
+                                    <li>• <strong>Angels Landing:</strong> מסלול מאתגר (דורש הגרלת היתר מראש).</li>
+                                    <li>• <strong>Riverside Walk:</strong> הליכה נינוחה לצד הנהר (מתאים לכולם).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">🕒 מידע שימושי:</h4>
+                                <p class="text-xs text-slate-500">
+                                    <strong>שאטלים:</strong> מתחילים ב-06:00. חובה לחנות במרכז המבקרים ולעלות עליהם. <br>
+                                    <strong>חשוב:</strong> בדקו תחזית לשיטפונות (Flash Floods) לפני הכניסה לנהר.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Antelope & Page Card -->
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
+                    <div class="md:w-1/3">
+                        <div class="img-placeholder m-6 h-64 md:h-full">
+                            
+                        </div>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-3xl font-black text-slate-800">פייג' (אנטילופ קניון)</h3>
+                                <p class="text-orange-600 font-bold">9 ביולי</p>
+                            </div>
+                            <span class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase">שיא ויזואלי</span>
+                        </div>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            <strong>רקע:</strong> האזור של פייג' מציע כמה מהמראות הכי מפורסמים באינסטגרם בעולם. אנטילופ קניון הוא קניון "סדק" שנוצר מזרימת מים בסלע, ויוצר צורות וצבעים מהפנטים.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות מרכזיות:</h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    <li>• <strong>Lower Antelope Canyon:</strong> הסיור המוזמן ב-10:00 (Ken's Tours).</li>
+                                    <li>• <strong>Horseshoe Bend:</strong> עיקול הנהר בצורת פרסה (מסלול קצר).</li>
+                                    <li>• <strong>Lake Powell:</strong> אגם ענק עם מרינות וסירות (תצפית וואוויפ).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">🕒 מידע שימושי:</h4>
+                                <p class="text-xs text-slate-500">
+                                    <strong>Antelope:</strong> התייצבות ב-09:20. אסור תיקים! <br>
+                                    <strong>Horseshoe Bend:</strong> דמי חניה כ-$10. פתוח מזריחה עד שקיעה. <br>
+                                    <strong>חום:</strong> הטמפרטורות יכולות לחצות את ה-40 מעלות.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lake Havasu Card -->
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                    <div class="md:w-1/3">
+                        <div class="img-placeholder m-6 h-64 md:h-full">
+                            
+                        </div>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-3xl font-black text-slate-800">לייק הבאסו סיטי</h3>
+                                <p class="text-orange-600 font-bold">9-10 ביולי</p>
+                            </div>
+                            <span class="bg-cyan-100 text-cyan-700 px-4 py-1 rounded-full text-xs font-bold uppercase">נווה מדבר</span>
+                        </div>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            <strong>רקע:</strong> העיר הזו ידועה בכך שרכשה את ה-London Bridge המקורי מאנגליה בשנות ה-60 והעבירה אותו אבן-אבן למדבר של אריזונה. זהו מרכז בילוי על המים.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות מרכזיות:</h4>
+                                <ul class="text-sm text-slate-600 space-y-1">
+                                    <li>• <strong>London Bridge:</strong> הליכה על הגשר ההיסטורי.</li>
+                                    <li>• <strong>English Village:</strong> אזור בילוי ומסעדות בסגנון אנגלי ליד הגשר.</li>
+                                    <li>• <strong>בריכת המלון:</strong> מקום מושלם להצטננות בשיא החום.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 mb-2">🕒 מידע שימושי:</h4>
+                                <p class="text-xs text-slate-500">
+                                    <strong>הבאסו לוהטת:</strong> בקיץ זהו אחד המקומות החמים בארה"ב. <br>
+                                    <strong>ארוחת בוקר:</strong> כלולה במלון Holiday Inn שלכם.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- VIEW 3: MAP & STATS -->
         <div id="view-stats" class="view-section hidden animate-fade">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Google Maps Card -->
                 <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="bg-green-100 p-3 rounded-2xl text-2xl">📍</div>
@@ -157,7 +375,6 @@
                             <p class="text-slate-500">חיבור ישיר ל-Google Maps עם כל התחנות</p>
                         </div>
                     </div>
-                    
                     <div class="bg-slate-50 rounded-2xl p-6 border-2 border-dashed border-slate-200 text-center mb-6">
                         <p class="text-slate-600 mb-6 text-lg">
                             כדי לנווט באמת, הכנו לכם קישור הכולל את כל המסלול: <br>
@@ -170,7 +387,6 @@
                             <span>↗️</span>
                         </a>
                     </div>
-                    
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
                         <div class="p-3 bg-slate-100 rounded-xl font-bold">1. לוס אנג'לס</div>
                         <div class="p-3 bg-slate-100 rounded-xl font-bold">2. לאס וגאס</div>
@@ -179,16 +395,13 @@
                     </div>
                 </div>
 
-                <!-- Activity Chart -->
                 <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
                     <h3 class="text-xl font-black mb-6 text-center">🎨 אופי הטיול</h3>
                     <div class="chart-container">
                         <canvas id="activityChart"></canvas>
                     </div>
-                    <p class="text-center text-slate-400 text-sm mt-6">אנחנו משלבים בין טבע פראי לבילוי עירוני מודרני.</p>
                 </div>
 
-                <!-- Drive Chart -->
                 <div class="lg:col-span-3 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
                     <h3 class="text-xl font-black mb-6 text-center">⏱️ מדד ה"עייפות": שעות נהיגה צפויות</h3>
                     <div class="chart-container h-80">
@@ -198,10 +411,9 @@
             </div>
         </div>
 
-        <!-- VIEW 3: LOGISTICS -->
+        <!-- VIEW 4: LOGISTICS -->
         <div id="view-logistics" class="view-section hidden animate-fade">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Car Reservation -->
                 <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
                     <div class="bg-slate-900 p-6 text-white flex justify-between items-center">
                         <h3 class="text-xl font-black italic">THRIFTY RENTAL</h3>
@@ -231,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- Important Notes -->
                 <div class="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
                     <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
                         <span class="bg-yellow-100 p-2 rounded-xl">📝</span>
@@ -253,7 +464,6 @@
                     </ul>
                 </div>
 
-                <!-- Hotel Table -->
                 <div class="md:col-span-2 bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
                     <table class="w-full text-right">
                         <thead class="bg-slate-900 text-white">
@@ -289,20 +499,20 @@
             </div>
         </div>
 
-        <!-- VIEW 4: GAMES -->
+        <!-- VIEW 5: GAMES -->
         <div id="view-games" class="view-section hidden animate-fade">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center text-right">
                     <div class="text-5xl mb-4">🤫</div>
                     <h3 class="text-2xl font-black mb-4">אני מביא למסיבה...</h3>
                     <p class="text-slate-500 text-sm">משחק חשיבה מעולה: אחד בוחר חוק סודי, והשאר מנסים להיכנס למסיבה על ידי הצעת חפצים שמתאימים לחוק.</p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-indigo-500 text-center">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-indigo-500 text-center text-right">
                     <div class="text-5xl mb-4">🤡</div>
                     <h3 class="text-2xl font-black mb-4">חי צומח דומם 2026</h3>
                     <p class="text-slate-500 text-sm">החליפו את הקטגוריות לקטגוריות של הטיול: "משהו שראינו בחוץ", "שם של שחקן כדורגל", "אוכל שאכלנו".</p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-orange-500 text-center">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-orange-500 text-center text-right">
                     <div class="text-5xl mb-4">🎸</div>
                     <h3 class="text-xl font-black mb-4">איזה שיר זה?</h3>
                     <p class="text-slate-500 text-sm">השמיעו את השניות הראשונות של שיר ב-Spotify. הראשון שמזהה בוחר את השיר הבא!</p>
@@ -383,7 +593,7 @@
                 item.className = `relative z-10 flex items-center justify-between w-full mb-10 ${isLeft ? 'flex-row-reverse' : ''}`;
                 
                 item.innerHTML = `
-                    <div class="order-1 w-5/12 hidden md:block"></div>
+                    <div class="order-1 w-5/12 hidden md:block text-right"></div>
                     <div class="z-20 flex items-center order-1 ${colorClass} shadow-xl w-12 h-12 rounded-2xl justify-center text-white text-xl">
                         ${icon}
                     </div>
