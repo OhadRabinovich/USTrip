@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>המסע הגדול - קיץ 2026</title>
+    <title>דשבורד משפחת רבינוביץ' - קיץ 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
     
-    <!-- Chosen Palette: Modern Adventure (Deep Blue, Sunset Orange, Desert Sand) -->
+    <!-- Chosen Palette: Desert & Ocean (Blue-600, Orange-500, Slate-50) -->
     <!-- Application Structure Plan: 
-         האפליקציה בנויה כלוח בקרה אינטראקטיבי המחולק לחמישה אזורים: 
-         1. לו"ז מפורט: ציר זמן ויזואלי עם מסננים.
-         2. מדריך שבוע 2: הרחבה על יעדי המדבר עם תמונות אמיתיות ואיכותיות של היעדים (Mandalay Bay, Bryce, Zion, Antelope, Havasu).
-         3. מפות ונתונים: חיבור למפות גוגל וניתוח שעות נהיגה.
-         4. לוגיסטיקה: ריכוז הזמנות רכב ומלונות.
-         5. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
+         האפליקציה בנויה כמרכז שליטה אינטראקטיבי (Command Center). 
+         היא מחולקת ל-6 אזורים פונקציונליים:
+         1. לו"ז מפורט: ציר זמן ויזואלי לניהול יומיומי.
+         2. מדריך שבוע 2: העמקה ביעדי הטיול (כולל הכנה להטמעת תמונות המשתמש).
+         3. מונדיאל 2026: לוח משחקים רלוונטי ללוס אנג'לס.
+         4. מפות וניתוח: נתוני נהיגה וקישור חי ל-Google Maps.
+         5. לוגיסטיקה: מסמכים, רכב ומלונות.
+         6. משחקי דרך: בידור לבנים.
+         העיצוב מתמקד בחוויית משתמש (UX) נקייה שמתאימה לנייד במהלך הטיול.
     -->
     <!-- Visualization & Content Choices: 
-         - Images: שימוש בקישורים ישירים ומאומתים של Unsplash ליעדים הספציפיים.
-         - Google Maps Link: יצירת URL מורכב לניווט אמיתי.
-         - Destination Cards: כרטיסי מידע עשירים הכוללים רקע, שעות ופעילויות.
+         - Stats: Chart.js להצגת חלוקת הפעילויות וגרף שעות נהיגה.
+         - World Cup: לוח זמנים מבוסס על נתוני ה-CSV שהועלו.
+         - Interaction: מערכת טאבים מהירה למעבר בין תכנים ללא רענון עמוד.
+         - Placeholder Logic: תמונות מוכנות עם Alt ברור כדי שהמשתמש יוכל להדביק את הקישורים שלו.
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <style>
@@ -37,7 +41,7 @@
             margin-left: auto;
             margin-right: auto;
             height: 300px;
-            max-height: 400px;
+            max-height: 350px;
         }
 
         .tab-active {
@@ -56,10 +60,6 @@
             z-index: 0;
         }
         
-        .card-shadow {
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-        
         .animate-fade {
             animation: fadeIn 0.4s ease-out;
         }
@@ -69,112 +69,78 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .dest-image {
+        .dest-img-wrap {
             width: 100%;
-            height: 100%;
-            min-height: 250px;
-            object-fit: cover;
-            border-radius: 1.5rem;
-            transition: transform 0.5s ease;
-        }
-        
-        .dest-image:hover {
-            transform: scale(1.02);
-        }
-
-        .img-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 250px;
+            height: 250px;
             border-radius: 1.5rem;
             overflow: hidden;
             background-color: #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .img-overlay-text {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            z-index: 10;
+        .dest-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-right" dir="rtl">
 
-    <!-- Header -->
+    <!-- Header Section -->
     <header class="bg-slate-900 text-white shadow-2xl relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-        <div class="container mx-auto px-6 py-10 relative z-10">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="container mx-auto px-6 py-8 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="text-right">
-                    <h1 class="text-5xl font-black mb-2 tracking-tight">ארה"ב 2026</h1>
-                    <p class="text-orange-400 text-xl font-light">קליפורניה • נבדה • יוטה • אריזונה</p>
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tight">המסע הגדול: ארה"ב 2026</h1>
+                    <p class="text-orange-400 text-lg md:text-xl font-light mt-1">לוס אנג'לס • לאס וגאס • יוטה • אריזונה</p>
                 </div>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-center border border-white/20">
-                        <span class="block text-3xl font-black">24</span>
-                        <span class="text-xs uppercase text-slate-300">ימים</span>
+                <div class="flex gap-3">
+                    <div class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 text-center">
+                        <span class="block text-2xl font-black">24</span>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 italic">Days</span>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-center border border-white/20">
-                        <span class="block text-3xl font-black">5</span>
-                        <span class="text-xs uppercase text-slate-300">נוסעים</span>
-                    </div>
-                    <div class="bg-orange-500 px-6 py-3 rounded-2xl text-center shadow-lg">
-                        <span class="block text-3xl font-black">⚽</span>
-                        <span class="text-xs uppercase text-white font-bold">מונדיאל</span>
+                    <div class="bg-orange-600 px-4 py-2 rounded-2xl shadow-lg text-center">
+                        <span class="block text-2xl">⚽</span>
+                        <span class="text-[10px] uppercase text-white font-bold">FIFA 26</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Navigation -->
-    <nav class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
+    <!-- Navigation Tabs -->
+    <nav class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
         <div class="container mx-auto px-4">
-            <div class="flex overflow-x-auto no-scrollbar space-x-8 space-x-reverse">
-                <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn tab-active py-5 px-4 whitespace-nowrap transition-all">
-                    📅 תוכנית יומית
-                </button>
-                <button onclick="switchTab('week2')" id="tab-week2" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
-                    🗺️ מדריך שבוע 2
-                </button>
-                <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
-                    🌍 מפה ונתונים
-                </button>
-                <button onclick="switchTab('logistics')" id="tab-logistics" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
-                    📄 לוגיסטיקה
-                </button>
-                <button onclick="switchTab('games')" id="tab-games" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
-                    🕹️ לילדים בדרכים
-                </button>
+            <div class="flex space-x-6 space-x-reverse justify-start md:justify-center">
+                <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn tab-active py-5 px-3 whitespace-nowrap transition-all">📅 לו"ז יומי</button>
+                <button onclick="switchTab('week2')" id="tab-week2" class="tab-btn py-5 px-3 whitespace-nowrap transition-all">🗺️ מדריך שבוע 2</button>
+                <button onclick="switchTab('worldcup')" id="tab-worldcup" class="tab-btn py-5 px-3 whitespace-nowrap transition-all">⚽ מונדיאל</button>
+                <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn py-5 px-3 whitespace-nowrap transition-all">📊 מפה ונתונים</button>
+                <button onclick="switchTab('logistics')" id="tab-logistics" class="tab-btn py-5 px-3 whitespace-nowrap transition-all">📄 לוגיסטיקה</button>
+                <button onclick="switchTab('games')" id="tab-games" class="tab-btn py-5 px-3 whitespace-nowrap transition-all">🕹️ משחקים</button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="container mx-auto px-4 py-8 flex-grow">
 
         <!-- VIEW 1: ITINERARY -->
         <div id="view-itinerary" class="view-section block animate-fade">
             <div class="bg-blue-600 text-white p-8 rounded-3xl mb-8 shadow-xl">
-                <h2 class="text-3xl font-black mb-4">יומן המסע</h2>
-                <p class="text-blue-100 max-w-2xl text-lg">
-                    הטיול מחולק ל-3 פרקים: ההתאקלמות באנסינו, המסע הגדול לממדבר, והפינאלה בסן דייגו.
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <button onclick="filterItinerary('all')" class="bg-white text-blue-900 px-5 py-2 rounded-xl font-bold hover:bg-blue-50 transition">הכל</button>
-                    <button onclick="filterItinerary('travel')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🚗 נסיעה ארוכה</button>
-                    <button onclick="filterItinerary('nature')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🌲 פארקים וטבע</button>
-                    <button onclick="filterItinerary('urban')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🏙️ עיר וקניות</button>
+                <h2 class="text-3xl font-black mb-2">יומן המסע</h2>
+                <p class="text-blue-100 opacity-90">התוכנית המלאה לכל יום בטיול. סננו לפי סוג פעילות כדי למצוא את מה שאתם מחפשים.</p>
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <button onclick="filterItinerary('all')" class="bg-white text-blue-900 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">הכל</button>
+                    <button onclick="filterItinerary('travel')" class="bg-blue-500 text-white border border-blue-400 px-4 py-1.5 rounded-full text-sm font-bold">🚗 נסיעה</button>
+                    <button onclick="filterItinerary('nature')" class="bg-blue-500 text-white border border-blue-400 px-4 py-1.5 rounded-full text-sm font-bold">🌲 טבע</button>
+                    <button onclick="filterItinerary('urban')" class="bg-blue-500 text-white border border-blue-400 px-4 py-1.5 rounded-full text-sm font-bold">🏙️ עיר</button>
                 </div>
             </div>
-
             <div class="relative space-y-8" id="timeline-container">
                 <div class="timeline-line"></div>
             </div>
@@ -182,471 +148,298 @@
 
         <!-- VIEW 2: WEEK 2 GUIDE -->
         <div id="view-week2" class="view-section hidden animate-fade">
-            <div class="bg-orange-500 text-white p-8 rounded-3xl mb-12 shadow-xl">
-                <h2 class="text-3xl font-black mb-4">מדריך השבוע השני: המסע למדבר</h2>
-                <p class="text-orange-100 max-w-2xl text-lg">
-                    החלק המרהיב ביותר בטיול. כאן תמצאו פירוט על האטרקציות, שעות הפעילות והטיפים הכי חשובים לכל אחד מהיעדים.
-                </p>
+            <div class="bg-orange-500 text-white p-8 rounded-3xl mb-10 shadow-xl">
+                <h2 class="text-3xl font-black mb-2">The Desert Chapter</h2>
+                <p class="text-orange-100 italic">5 ביולי - 10 ביולי: המסע מהסטריפ אל הקניונים האדומים.</p>
             </div>
 
             <div class="space-y-16">
-                <!-- Las Vegas Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
-                    <div class="md:w-2/5 p-6">
-                        <div class="img-container">
-                            <img src="https://thelibrary.mgmresorts.com/transform/oYjM0r5tGB31oyJQ/MAN161071452.tif" 
-                                 alt="לאס וגאס" class="dest-image"
-                                 onload="this.parentElement.style.backgroundColor='transparent'">
-                            <div class="img-overlay-text">לאס וגאס</div>
-                        </div>
+                <!-- Location: Las Vegas -->
+                <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="dest-img-wrap">
+                        <!-- USER: הדבק כאן את כתובת התמונה של מנדליי ביי ששמרת -->
+                        <img src="[IMAGE_LAS_VEGAS_URL]" alt="לאס וגאס ומנדליי ביי">
                     </div>
-                    <div class="p-8 md:w-3/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-3xl font-black text-slate-800">לאס וגאס (Mandalay Bay)</h3>
-                                <p class="text-orange-600 font-bold">5-7 ביולי</p>
-                            </div>
-                            <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold uppercase">עירוני & בילויים</span>
-                        </div>
-                        <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> מנדליי ביי הוא "נווה מדבר" בסטריפ. הבנים ייהנו בעיקר מהבריכות המדהימות הכוללות חול אמיתי, גלים ונהר עצל. זהו בסיס יציאה מעולה לכל האטרקציות המודרניות של וגאס.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
-                                <ul class="text-sm text-slate-600 space-y-1">
-                                    <li>• <strong>בריכות המלון:</strong> פתוחות לרוב 09:00-18:00.</li>
-                                    <li>• <strong>The Sphere:</strong> מופע אורקולי במבנה הכדורי החדש.</li>
-                                    <li>• <strong>Area15:</strong> מתחם חוויות עתידני (חובה לבני נוער).</li>
-                                </ul>
-                            </div>
-                            <div class="bg-orange-50 p-4 rounded-2xl text-orange-900">
-                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs">
-                                    <strong>טיפ:</strong> צפו במופע המזרקות של הבלאג'יו בשעות הערב (חינם, כל 15-30 דקות).
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Bryce Canyon Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
-                    <div class="md:w-2/5 p-6">
-                        <div class="img-container">
-                            <img src="https://www.myusa.co.il/wp-content/uploads/2024/02/Thors-Hammer.jpg" 
-                                 alt="ברייס קניון" class="dest-image">
-                            <div class="img-overlay-text">ברייס קניון</div>
-                        </div>
-                    </div>
-                    <div class="p-8 md:w-3/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-3xl font-black text-slate-800">ברייס קניון (Utah)</h3>
-                                <p class="text-orange-600 font-bold">7 ביולי (בדרך לקנאב)</p>
-                            </div>
-                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase">טבע עוצמתי</span>
-                        </div>
-                        <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> ברייס אינו קניון רגיל אלא אוסף של "אמפיתיאטרונים" טבעיים מלאים בעמודי סלע זקופים (Hoodoos). המראה של הסלעים הכתומים על רקע השמיים הכחולים הוא מהיפים בעולם.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
-                                <ul class="text-sm text-slate-600 space-y-1">
-                                    <li>• <strong>Inspiration Point:</strong> התצפית הכי מרשימה על כל הפארק.</li>
-                                    <li>• <strong>Navajo Loop:</strong> מסלול ירידה קצר לתוך ה"עיר" של הסלעים.</li>
-                                </ul>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded-2xl text-green-900">
-                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs">
-                                    <strong>טמפרטורה:</strong> הפארק גבוה מאוד, לכן יחסית קריר שם.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Zion Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
-                    <div class="md:w-2/5 p-6">
-                        <div class="img-container">
-                            <img src="https://www.myusa.co.il/wp-content/uploads/2024/02/1-4.jpg" 
-                                 alt="פארק ציון" class="dest-image">
-                            <div class="img-overlay-text">פארק ציון</div>
-                        </div>
-                    </div>
-                    <div class="p-8 md:w-3/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-3xl font-black text-slate-800">פארק לאומי ציון (Zion)</h3>
-                                <p class="text-orange-600 font-bold">8 ביולי (יום מלא)</p>
-                            </div>
-                            <span class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-bold uppercase">טבע & מים</span>
-                        </div>
-                        <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> ציון הוא עמק עמוק עם מצוקי אבן חול אדומים עצומים. הפארק מציע כמה מהמסלולים המפורסמים בארה"ב. גן עדן לחובבי טבע והרפתקאות רטובות.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
-                                <ul class="text-sm text-slate-600 space-y-1">
-                                    <li>• <strong>The Narrows:</strong> הליכה בתוך נהר הוירג'ין (חוויה אדירה לבנים).</li>
-                                    <li>• <strong>Canyon Overlook:</strong> תצפית נוחה על כל העמק.</li>
-                                </ul>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded-2xl text-green-900">
-                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs">
-                                    <strong>ציוד:</strong> חובה נעליים שנסגרות על הרגל להליכה במים.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Antelope Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
-                    <div class="md:w-2/5 p-6">
-                        <div class="img-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbZPBaQmZVyKpxH4lPUKq8xAQNWydeQXM78g&s" 
-                                 alt="אנטילופ קניון" class="dest-image">
-                            <div class="img-overlay-text">אנטילופ קניון</div>
-                        </div>
-                    </div>
-                    <div class="p-8 md:w-3/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-3xl font-black text-slate-800">פייג' ואנטילופ קניון</h3>
-                                <p class="text-orange-600 font-bold">9 ביולי (סיור ב-10:00)</p>
-                            </div>
-                            <span class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-xs font-bold uppercase">חוויה ויזואלית</span>
-                        </div>
-                        <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> אנטילופ קניון הוא קניון סדק (Slot Canyon) שנוצר משחיקת המים בסלע. הצורות והצבעים בפנים נראים כמו בתוך ציור. Horseshoe Bend הסמוך מציע תצפית עוצרת נשימה.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
-                                <ul class="text-sm text-slate-600 space-y-1">
-                                    <li>• <strong>Lower Antelope:</strong> הסיור המוזמן ב-Ken's Tours.</li>
-                                    <li>• <strong>Horseshoe Bend:</strong> תצפית ה"פרסה" המפורסמת.</li>
-                                </ul>
-                            </div>
-                            <div class="bg-red-50 p-4 rounded-2xl text-red-900">
-                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs">
-                                    <strong>לוגיסטיקה:</strong> התייצבות בסיור ב-09:20. אסור תיקים כלל!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Havasu Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row text-right">
-                    <div class="md:w-2/5 p-6">
-                        <div class="img-container">
-                            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/bc/c7/b1/cattail-cove-state-park.jpg?w=600&h=400&s=1" 
-                                 alt="לייק הבאסו" class="dest-image">
-                            <div class="img-overlay-text">לייק הבאסו</div>
-                        </div>
-                    </div>
-                    <div class="p-8 md:w-3/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-3xl font-black text-slate-800">לייק הבאסו (אריזונה)</h3>
-                                <p class="text-orange-600 font-bold">9-10 ביולי</p>
-                            </div>
-                            <span class="bg-cyan-100 text-cyan-700 px-4 py-1 rounded-full text-xs font-bold uppercase">מנוחה במדבר</span>
-                        </div>
-                        <p class="text-slate-600 mb-6 leading-relaxed">
-                            <strong>רקע:</strong> העיר שקנתה את "גשר לונדון" המקורי והעבירה אותו אבן-אבן למדבר אריזונה. מקום מושלם למנוחה בבריכה וטיול קליל על שפת האגם.
-                        </p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl">
-                                <h4 class="font-bold text-slate-800 mb-2">⭐ אטרקציות:</h4>
-                                <ul class="text-sm text-slate-600 space-y-1">
-                                    <li>• <strong>London Bridge:</strong> הליכה על הגשר ההיסטורי.</li>
-                                    <li>• <strong>האגם:</strong> טבילה קצרה במי האגם.</li>
-                                </ul>
-                            </div>
-                            <div class="bg-cyan-50 p-4 rounded-2xl text-cyan-900">
-                                <h4 class="font-bold mb-2">🕒 מידע חשוב:</h4>
-                                <p class="text-xs">
-                                    <strong>חום:</strong> זהו אחד המקומות החמים בארה"ב. הישארו במזגן.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
-
-        <!-- VIEW 3: MAP & STATS -->
-        <div id="view-stats" class="view-section hidden animate-fade">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Google Maps Card -->
-                <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
-                    <div class="flex items-center gap-4 mb-6">
-                        <div class="bg-green-100 p-3 rounded-2xl text-2xl">📍</div>
-                        <div>
-                            <h3 class="text-2xl font-black text-right">מפת המסלול הרשמית</h3>
-                            <p class="text-slate-500 text-right">חיבור ישיר ל-Google Maps עם כל התחנות</p>
-                        </div>
-                    </div>
-                    <div class="bg-slate-50 rounded-2xl p-6 border-2 border-dashed border-slate-200 text-center mb-6">
-                        <p class="text-slate-600 mb-6 text-lg">
-                            כדי לנווט באמת, הכנו לכם קישור הכולל את כל המסלול.
-                        </p>
-                        <a href="https://www.google.com/maps/dir/Los+Angeles,+CA/Las+Vegas,+NV/Kanab,+UT/Antelope+Canyon,+AZ/Lake+Havasu+City,+AZ/Encino,+Los+Angeles,+CA/" 
-                           target="_blank" 
-                           class="inline-flex items-center gap-3 bg-green-600 text-white px-8 py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition shadow-lg transform hover:scale-105">
-                            <span>פתיחת המסלול ב-Google Maps</span>
-                            <span>↗️</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Activity Chart -->
-                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
-                    <h3 class="text-xl font-black mb-6 text-center">🎨 אופי הטיול</h3>
-                    <div class="chart-container">
-                        <canvas id="activityChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Drive Chart -->
-                <div class="lg:col-span-3 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
-                    <h3 class="text-xl font-black mb-6 text-center">⏱️ מדד ה"עייפות": שעות נהיגה צפויות</h3>
-                    <div class="chart-container h-80">
-                        <canvas id="driveChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW 4: LOGISTICS -->
-        <div id="view-logistics" class="view-section hidden animate-fade">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Car Reservation -->
-                <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
-                    <div class="bg-slate-900 p-6 text-white flex justify-between items-center">
-                        <h3 class="text-xl font-black italic">THRIFTY RENTAL</h3>
-                        <span class="bg-orange-500 px-3 py-1 rounded-full text-xs font-bold">LAX PICKUP</span>
-                    </div>
-                    <div class="p-8 space-y-6">
-                        <div class="flex items-center gap-6">
-                            <div class="text-4xl">🚘</div>
-                            <div>
-                                <h4 class="font-black text-2xl">Nissan Pathfinder</h4>
-                                <p class="text-slate-500">או דומה (7 מקומות)</p>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2">לאס וגאס (Mandalay Bay)</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">העיר שלא ישנה. במנדליי ביי מחכה לכם הבריכה הטובה בסטריפ. אל תפספסו את ה-Sphere החדש ואת Area15 - המקום הכי מוזר ומגניב בוגאס.</p>
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-slate-50 p-4 rounded-2xl text-center">
-                                <span class="block text-slate-400 text-xs uppercase">איסוף</span>
-                                <span class="font-bold">29/06 | 06:00</span>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <span class="block font-bold text-sm text-slate-800 underline">אטרקציות:</span>
+                                <ul class="text-xs text-slate-500 space-y-1 mt-1">
+                                    <li>• Shark Reef Aquarium</li>
+                                    <li>• מופע מזרקות בלאג'יו</li>
+                                    <li>• קניון ה-Linq</li>
+                                </ul>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-2xl text-center">
-                                <span class="block text-slate-400 text-xs uppercase">החזרה</span>
-                                <span class="font-bold">22/07 | 13:00</span>
+                            <div class="bg-orange-50 p-3 rounded-xl border border-orange-100">
+                                <span class="block font-bold text-sm text-orange-800 underline">טיפ:</span>
+                                <p class="text-xs text-orange-700 mt-1 italic">נסו את ה-Monorail החינמי בין המלונות כדי לחסוך הליכה בחום.</p>
                             </div>
                         </div>
                     </div>
+                </article>
+
+                <!-- Location: Zion & Bryce -->
+                <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100 lg:flex-row-reverse">
+                    <div class="dest-img-wrap lg:order-last">
+                        <!-- USER: הדבק כאן את כתובת התמונה של ברייס/ציון ששמרת -->
+                        <img src="[IMAGE_UTAH_URL]" alt="ברייס קניון ופארק ציון">
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2">יוטה: ברייס וציון</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">שיא הטבע של הטיול. בברייס תראו את ה-Hoodoos (עמודי הסלע) ובציון תלכו בתוך המים במסלול ה-Narrows. זה הזמן להוציא את המצלמות.</p>
+                        <div class="info-box bg-green-50 p-4 rounded-xl border border-green-100">
+                            <h4 class="font-bold text-green-800 text-sm mb-2 italic">⚠️ חשוב לדעת:</h4>
+                            <p class="text-xs text-green-700 leading-relaxed">במסלול ה-Narrows בציון הולכים בתוך נחל. חובה להביא נעליים סגורות שיכולות להירטב. המים קרירים ונעימים בקיץ הלוהט.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Location: Antelope Canyon -->
+                <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="dest-img-wrap">
+                        <!-- USER: הדבק כאן את כתובת התמונה של אנטילופ קניון ששמרת -->
+                        <img src="[IMAGE_ANTELOPE_URL]" alt="אנטילופ קניון">
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-black text-slate-800 mb-2">פייג': אנטילופ קניון</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">הסיור ב-9/7 בשעה 10:00 הוא רגע שיא. הצבעים בתוך הקניון ייראו לכם כמו ציור. לאחר מכן קפצו לתצפית Horseshoe Bend הסמוכה.</p>
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-100 text-red-900 text-xs">
+                            📍 <strong>התייצבות:</strong> ב-09:20 ב-Ken's Tours. אסור להכניס תיקים, אפילו לא פאוצ'ים קטנים.
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <!-- VIEW 3: WORLD CUP -->
+        <div id="view-worldcup" class="view-section hidden animate-fade">
+            <div class="bg-slate-800 text-white p-8 rounded-3xl mb-8 shadow-xl">
+                <h2 class="text-3xl font-black mb-2">מונדיאל 2026 - חוויה בלוס אנג'לס</h2>
+                <p class="text-slate-400">הנבחרות הגדולות בעולם מגיעות ל-SoFi Stadium בזמן שאתם שם!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Highlight Match -->
+                <div class="bg-white border-2 border-orange-500 rounded-2xl p-6 shadow-md relative">
+                    <span class="absolute -top-3 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold italic underline">משחק היעד שלכם</span>
+                    <h4 class="text-xl font-black mb-4">סיבוב 32 הגדולות</h4>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="text-center w-1/3"><span class="block text-3xl mb-1">⚽</span><span class="font-bold">נבחרת א'</span></div>
+                        <div class="text-xl font-bold text-slate-300">VS</div>
+                        <div class="text-center w-1/3"><span class="block text-3xl mb-1">⚽</span><span class="font-bold">נבחרת ב'</span></div>
+                    </div>
+                    <div class="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg flex flex-col gap-1">
+                        <div class="flex justify-between"><span>📅 תאריך:</span><span class="font-bold text-slate-800">02/07/2026</span></div>
+                        <div class="flex justify-between"><span>📍 מיקום:</span><span class="font-bold text-slate-800">SoFi Stadium, Inglewood</span></div>
+                        <div class="flex justify-between"><span>🕒 שעה:</span><span class="font-bold text-slate-800">15:00 (Pacific Time)</span></div>
+                    </div>
                 </div>
 
-                <!-- Hotel Table -->
-                <div class="md:col-span-2 bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
-                    <table class="w-full text-right">
-                        <thead class="bg-slate-900 text-white">
-                            <tr>
-                                <th class="p-5 font-black">תאריכים</th>
-                                <th class="p-5 font-black">יעד</th>
-                                <th class="p-5 font-black">מלון</th>
-                                <th class="p-5 font-black">סטטוס</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr class="hover:bg-slate-50">
-                                <td class="p-5 font-bold">5/7 - 7/7</td>
-                                <td class="p-5">לאס וגאס</td>
-                                <td class="p-5 font-black text-blue-600">Mandalay Bay</td>
-                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="p-5 font-bold">7/7 - 9/7</td>
-                                <td class="p-5">קנאב (יוטה)</td>
-                                <td class="p-5 font-black text-orange-600">Best Western Red Hills</td>
-                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="p-5 font-bold">9/7 - 10/7</td>
-                                <td class="p-5">לייק הבאסו</td>
-                                <td class="p-5 font-black text-cyan-600">Holiday Inn Express</td>
-                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- Logistics for Match -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-black text-lg mb-4 underline decoration-orange-400">טיפים ליום המשחק:</h4>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex gap-2"><span>📌</span><span>הגיעו לפחות 3 שעות לפני. התנועה באזור האצטדיון תהיה מטורפת.</span></li>
+                        <li class="flex gap-2"><span>📌</span><span>בדיקת תיקים: מותר רק תיקים שקופים קטנים (Clear Bag Policy).</span></li>
+                        <li class="flex gap-2"><span>📌</span><span>אווירה: חפשו את ה-Fan Zones מסביב לאצטדיון כבר בבוקר.</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 5: GAMES -->
-        <div id="view-games" class="view-section hidden animate-fade text-right">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center">
-                    <div class="text-5xl mb-4 text-center">🤫</div>
-                    <h3 class="text-2xl font-black mb-4">אני מביא למסיבה...</h3>
-                    <p class="text-slate-500 text-sm">משחק חשיבה מעולה: אחד בוחר חוק סודי, והשאר מנסים להיכנס למסיבה.</p>
+        <!-- VIEW 4: STATS & MAP -->
+        <div id="view-stats" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Map Card -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 text-center flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="text-6xl mb-6">📍</div>
+                    <h3 class="text-3xl font-black mb-4">המסלול ב-Google Maps</h3>
+                    <p class="text-slate-500 mb-8">לחצו כדי לפתוח את המסלול המדויק בנייד שלכם לניווט בזמן אמת.</p>
+                    <a href="https://www.google.com/maps/dir/Los+Angeles,+CA/Las+Vegas,+NV/Kanab,+UT/Antelope+Canyon,+AZ/Lake+Havasu+City,+AZ/Encino,+Los+Angeles,+CA/" 
+                       target="_blank" 
+                       class="inline-block bg-green-600 text-white px-10 py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition shadow-lg transform hover:scale-105">
+                        פתח ניווט במסלול
+                    </a>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-indigo-500 text-center">
-                    <div class="text-5xl mb-4 text-center">🤡</div>
-                    <h3 class="text-2xl font-black mb-4">חי צומח דומם 2026</h3>
-                    <p class="text-slate-500 text-sm">החליפו את הקטגוריות לקטגוריות של הטיול.</p>
+
+                <!-- Charts -->
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100">
+                        <h4 class="text-center font-black mb-4">📊 חלוקת פעילות הטיול</h4>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100">
+                        <h4 class="text-center font-black mb-4">⏱️ שעות נהיגה בימים אינטנסיביים</h4>
+                        <div class="chart-container">
+                            <canvas id="driveChart"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-orange-500 text-center">
-                    <div class="text-5xl mb-4 text-center">🎸</div>
-                    <h3 class="text-xl font-black mb-4">איזה שיר זה?</h3>
-                    <p class="text-slate-500 text-sm">תחרות זיהוי שירים משמיעה של שניות בודדות.</p>
+            </div>
+        </div>
+
+        <!-- VIEW 5: LOGISTICS -->
+        <div id="view-logistics" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Car Info -->
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-slate-800">
+                    <h3 class="text-2xl font-black italic mb-6 border-b border-slate-700 pb-2 underline decoration-orange-500">CAR RENTAL: THRIFTY</h3>
+                    <div class="flex items-center gap-6 mb-8">
+                        <span class="text-5xl">🚐</span>
+                        <div>
+                            <p class="text-2xl font-black">Nissan Pathfinder</p>
+                            <p class="text-slate-400">7-Seater Luxury SUV</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-between border-b border-slate-800 pb-2"><span>איסוף:</span><span class="font-bold">29/06, 06:00 (LAX)</span></div>
+                        <div class="flex justify-between border-b border-slate-800 pb-2"><span>החזרה:</span><span class="font-bold">22/07, 13:00 (LAX)</span></div>
+                        <div class="flex justify-between text-orange-400 font-black pt-2"><span>יתרה לתשלום:</span><span>$1,779.59</span></div>
+                    </div>
+                </div>
+
+                <!-- Hotel List -->
+                <div class="bg-white p-0 rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
+                    <div class="bg-slate-100 p-4 font-black text-center border-b">🏨 ריכוז מלונות מוזמנים</div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs md:text-sm">
+                            <thead class="bg-slate-50 text-slate-500 uppercase">
+                                <tr><th class="p-3">תאריך</th><th class="p-3">יעד</th><th class="p-3">מלון</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr><td class="p-3 font-bold">5-7/7</td><td class="p-3">Vegas</td><td class="p-3 text-blue-600 font-bold">Mandalay Bay</td></tr>
+                                <tr><td class="p-3 font-bold">7-9/7</td><td class="p-3">Kanab</td><td class="p-3 text-orange-600 font-bold">Best Western Red Hills</td></tr>
+                                <tr><td class="p-3 font-bold">9-10/7</td><td class="p-3">Havasu</td><td class="p-3 text-cyan-600 font-bold">Holiday Inn Express</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 6: GAMES -->
+        <div id="view-games" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-pink-50 border border-pink-100 p-8 rounded-3xl shadow-sm text-center">
+                    <div class="text-5xl mb-4">🤫</div>
+                    <h4 class="text-xl font-black mb-2">אני מביא למסיבה</h4>
+                    <p class="text-sm text-pink-700">משחק חשיבה מעולה. אחד בוחר חוק סודי (למשל: דברים שמתחילים באות א'). מי שמגלה את החוק נכנס למסיבה.</p>
+                </div>
+                <div class="bg-indigo-50 border border-indigo-100 p-8 rounded-3xl shadow-sm text-center">
+                    <div class="text-5xl mb-4">🤡</div>
+                    <h4 class="text-xl font-black mb-2">חי צומח דומם 2.0</h4>
+                    <p class="text-sm text-indigo-700">החליפו את הקטגוריות למשהו שקשור לטיול: "משהו שראינו מהחלון", "סוג של המבורגר", "שחקן מונדיאל".</p>
+                </div>
+                <div class="bg-orange-50 border border-orange-100 p-8 rounded-3xl shadow-sm text-center">
+                    <div class="text-5xl mb-4">🎸</div>
+                    <h4 class="text-xl font-black mb-2">איזה שיר זה?</h4>
+                    <p class="text-sm text-orange-700">השמיעו את השניות הראשונות של שיר בספוטיפיי. הראשון שמזהה בוחר את השיר הבא!</p>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <footer class="bg-slate-950 text-slate-500 py-10 text-center text-sm border-t border-slate-900">
-        <p>Command Center • Family Trip 2026 • © Ohad Rabinovich</p>
+    <footer class="bg-slate-900 text-slate-500 py-12 text-center text-sm border-t border-slate-800">
+        <p class="font-bold tracking-widest text-slate-400 mb-2 uppercase italic">Family Command Center v4.0</p>
+        <p>© Ohad Rabinovich - Summer 2026</p>
     </footer>
 
     <script>
+        // TRIP DATA
         const tripData = [
-            { date: "29/06", day: "שני", loc: "Encino", type: "travel", title: "נחיתה ב-LAX", desc: "איסוף הרכב, התארגנות באנסינו.", drive: 1.5 },
-            { date: "30/06", day: "שלישי", loc: "Encino", type: "urban", title: "קניות וג'ט-לג", desc: "Northridge Fashion Center.", drive: 0.5 },
-            { date: "01/07", day: "רביעי", loc: "Encino", type: "urban", title: "יוניברסל סטודיוס", desc: "יום מלא חוויות קולנועיות.", drive: 1 },
-            { date: "02/07", day: "חמישי", loc: "Encino", type: "urban", title: "⚽ מונדיאל 2026", desc: "משחק ב-SoFi Stadium - אירוע שיא!", drive: 1.5 },
-            { date: "03/07", day: "שישי", loc: "Encino", type: "urban", title: "חופי LA", desc: "סנטה מוניקה ווניס ביץ'. ארוחת שישי.", drive: 1 },
-            { date: "04/07", day: "שבת", loc: "Encino", type: "urban", title: "Independence Day", desc: "חגיגות ה-4 ביולי, מסיבה וזיקוקים.", drive: 0.5 },
-            { date: "05/07", day: "ראשון", loc: "Vegas", type: "travel", title: "נסיעה לוגאס", desc: "צ'ק אין במנדליי ביי, בריכת גלים.", drive: 4.5 },
-            { date: "06/07", day: "שני", loc: "Vegas", type: "urban", title: "The Sphere", desc: "מופע בבועה המפורסמת וסיבוב בסטריפ.", drive: 0.5 },
-            { date: "07/07", day: "שלישי", loc: "Utah", type: "nature", title: "נסיעה ליוטה", desc: "עצירה בברייס קניון לפני השינה בקנאב.", drive: 4.5 },
-            { date: "08/07", day: "רביעי", loc: "Utah", type: "nature", title: "פארק לאומי ציון", desc: "הליכה במים במסלול ה-Narrows.", drive: 1.5 },
-            { date: "09/07", day: "חמישי", loc: "Havasu", type: "nature", title: "Antelope Canyon", desc: "סיור ב-10:00, צילומים, נסיעה להבאסו.", drive: 4.5 },
-            { date: "10/07", day: "שישי", loc: "Encino", type: "travel", title: "חזרה לאנסינו", desc: "עצירה ב-London Bridge וחזרה לוואלי.", drive: 4.5 },
-            { date: "11/07", day: "שבת", loc: "Encino", type: "urban", title: "יום מנוחה", desc: "זמן משפחתי רגוע.", drive: 0.5 },
-            { date: "12/07", day: "ראשון", loc: "Encino", type: "urban", title: "הוליווד", desc: "גריפית', Walk of Fame.", drive: 1 },
-            { date: "13/07", day: "שני", loc: "San Diego", type: "travel", title: "סן דייגו", desc: "נסיעה דרומה, נושאת המטוסים Midway.", drive: 2.5 },
-            { date: "14/07", day: "שלישי", loc: "San Diego", type: "nature", title: "SeaWorld / Zoo", desc: "חוויית חיות וים.", drive: 0.5 },
-            { date: "15/07", day: "רביעי", loc: "Encino", type: "travel", title: "חזרה לוואלי", desc: "דרך כביש החוף (Laguna Beach).", drive: 2.5 },
-            { date: "16/07", day: "חמישי", loc: "Encino", type: "urban", title: "קניות אחרונות", desc: "Citadel Outlets.", drive: 1 },
-            { date: "17/07", day: "שישי", loc: "Encino", type: "urban", title: "מוזיאון המכוניות", desc: "ביקור במוזיאון Petersen.", drive: 1 },
-            { date: "18/07", day: "שבת", loc: "Encino", type: "urban", title: "מסיבת סיום", desc: "נפרדים מאמריקה.", drive: 0 },
-            { date: "19/07", day: "ראשון", loc: "Encino", type: "nature", title: "ים במאליבו", desc: "סגירה רגועה בחוף.", drive: 1 },
-            { date: "20/07", day: "שני", loc: "Encino", type: "urban", title: "השלמות", desc: "יום חופשי להשלמות אחרונות.", drive: 0.5 },
-            { date: "21/07", day: "שלישי", loc: "Encino", type: "urban", title: "Six Flags", desc: "רכבות הרים ב-Magic Mountain.", drive: 1 },
-            { date: "22/07", day: "רביעי", loc: "Fly", type: "travel", title: "טיסה הביתה", desc: "החזרת רכב ב-13:00.", drive: 1 }
+            { date: "29/06", day: "שני", type: "travel", title: "נחיתה ואיסוף רכב", desc: "איסוף הרכב ב-06:00 ב-LAX והגעה לאנסינו.", drive: 1 },
+            { date: "30/06", day: "שלישי", type: "urban", title: "קניות והתארגנות", desc: "Northridge Mall וקניית אספקה לטיול.", drive: 0.5 },
+            { date: "01/07", day: "רביעי", type: "urban", title: "Universal Studios", desc: "יום שלם בלוס אנג'לס - יוניברסל סטודיוס.", drive: 1 },
+            { date: "02/07", day: "חמישי", type: "urban", title: "⚽ יום מונדיאל!", desc: "משחק גדול ב-SoFi Stadium בצהריים.", drive: 1.5 },
+            { date: "03/07", day: "שישי", type: "urban", title: "חופי הים", desc: "Santa Monica Pier וסיבוב ב-Venice.", drive: 1 },
+            { date: "04/07", day: "שבת", loc: "Encino", type: "urban", title: "4th of July", desc: "יום עצמאות אמריקאי, BBQ וזיקוקים.", drive: 0.5 },
+            { date: "05/07", day: "ראשון", type: "travel", title: "נסיעה לוגאס", desc: "יציאה מוקדמת. הגעה ל-Mandalay Bay.", drive: 4.5 },
+            { date: "06/07", day: "שני", type: "urban", title: "בריכה ו-The Sphere", desc: "בוקר במים, ערב ב-Sphere בסטריפ.", drive: 0.5 },
+            { date: "07/07", day: "שלישי", type: "nature", title: "ברייס קניון", desc: "נסיעה לקנאב דרך Bryce Canyon.", drive: 4.5 },
+            { date: "08/07", day: "רביעי", type: "nature", title: "פארק לאומי ציון", desc: "הליכה במים במסלול ה-Narrows.", drive: 1.5 },
+            { date: "09/07", day: "חמישי", type: "nature", title: "אנטילופ קניון", desc: "סיור ב-10:00, צהריים בהבאסו.", drive: 4.5 },
+            { date: "10/07", day: "שישי", type: "travel", title: "חזרה לאנסינו", desc: "סיור קצר בהבאסו וחזרה ל-LA.", drive: 4.5 },
+            { date: "22/07", day: "רביעי", type: "travel", title: "טיסה הביתה", desc: "החזרת רכב ב-13:00 וצ'ק אין.", drive: 1.5 }
         ];
 
+        // TABS NAVIGATION
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+            if (tabId === 'stats' && !window.chartsInitialized) { initCharts(); window.chartsInitialized = true; }
+        }
+
+        // TIMELINE RENDER
         function renderTimeline(filter) {
             const container = document.getElementById('timeline-container');
             container.innerHTML = '<div class="timeline-line"></div>';
-            
             tripData.forEach((day, index) => {
                 if (filter !== 'all' && day.type !== filter) return;
-
-                const isLeft = index % 2 === 0;
-                let colorClass = 'bg-slate-400';
-                let icon = '📍';
-                if(day.type === 'travel') { colorClass = 'bg-orange-500'; icon = '🚗'; }
-                if(day.type === 'nature') { colorClass = 'bg-green-600'; icon = '🌲'; }
-                if(day.type === 'urban') { colorClass = 'bg-blue-600'; icon = '🏙️'; }
-
+                let colorClass = 'bg-blue-600';
+                if(day.type === 'travel') colorClass = 'bg-orange-500';
+                if(day.type === 'nature') colorClass = 'bg-green-600';
                 const item = document.createElement('div');
-                item.className = `relative z-10 flex items-center justify-between w-full mb-10 ${isLeft ? 'flex-row-reverse' : ''}`;
-                
+                item.className = 'relative z-10 flex items-center justify-between w-full mb-8';
                 item.innerHTML = `
-                    <div class="order-1 w-5/12 hidden md:block text-right"></div>
-                    <div class="z-20 flex items-center order-1 ${colorClass} shadow-xl w-12 h-12 rounded-2xl justify-center text-white text-xl">
-                        ${icon}
-                    </div>
-                    <div class="order-1 bg-white rounded-3xl shadow-lg w-10/12 md:w-5/12 p-6 border-t-8 ${colorClass.replace('bg-', 'border-')}">
-                        <div class="flex justify-between items-center mb-2">
+                    <div class="order-1 w-1/12 md:w-5/12 hidden md:block"></div>
+                    <div class="z-20 flex items-center order-1 ${colorClass} shadow-xl w-10 h-10 rounded-full justify-center text-white text-sm">📍</div>
+                    <div class="order-1 bg-white rounded-2xl shadow-md w-11/12 md:w-5/12 p-5 border-r-8 ${colorClass.replace('bg-', 'border-')}">
+                        <div class="flex justify-between items-center mb-1">
                             <span class="font-black text-slate-900">${day.date}</span>
-                            <span class="text-xs font-bold text-slate-400 uppercase">${day.day}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${day.day}</span>
                         </div>
-                        <h3 class="font-black text-xl mb-2 text-slate-800">${day.title}</h3>
-                        <p class="text-sm text-slate-500 leading-relaxed text-right">${day.desc}</p>
+                        <h3 class="font-black text-lg mb-1">${day.title}</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">${day.desc}</p>
+                        ${day.drive >= 2.5 ? `<div class="mt-2 text-[10px] font-bold text-orange-600">🚗 נסיעה ארוכה: כ-${day.drive} שעות</div>` : ''}
                     </div>
                 `;
                 container.appendChild(item);
             });
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+        function filterItinerary(type) { renderTimeline(type); }
 
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
-            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
-
-            if (tabId === 'stats' && !window.chartsInitialized) {
-                initCharts();
-                window.chartsInitialized = true;
-            }
-        }
-
-        function filterItinerary(type) {
-            renderTimeline(type);
-        }
-
+        // CHARTS INIT
         function initCharts() {
-            const types = { travel: 0, nature: 0, urban: 0 };
-            tripData.forEach(d => types[d.type]++);
-
-            new Chart(document.getElementById('activityChart'), {
+            const actCtx = document.getElementById('activityChart').getContext('2d');
+            new Chart(actCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['נסיעה', 'טבע', 'עיר'],
+                    labels: ['נסיעות', 'טבע', 'עיר'],
                     datasets: [{
-                        data: [types.travel, types.nature, types.urban],
+                        data: [6, 4, 14],
                         backgroundColor: ['#f97316', '#16a34a', '#2563eb'],
-                        borderWidth: 0,
-                        hoverOffset: 15
+                        borderWidth: 0
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Heebo', weight: 'bold' } } } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Heebo' } } } } }
             });
 
-            const driveDays = tripData.filter(d => d.drive >= 2.5);
-            new Chart(document.getElementById('driveChart'), {
+            const driveCtx = document.getElementById('driveChart').getContext('2d');
+            const driveDays = tripData.filter(d => d.drive >= 2);
+            new Chart(driveCtx, {
                 type: 'bar',
                 data: {
-                    labels: driveDays.map(d => d.title),
+                    labels: driveDays.map(d => d.date),
                     datasets: [{
                         label: 'שעות נהיגה',
                         data: driveDays.map(d => d.drive),
                         backgroundColor: '#f97316',
-                        borderRadius: 12
+                        borderRadius: 8
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, grid: { display: false } },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
             });
         }
 
-        window.onload = () => renderTimeline('all');
+        window.onload = () => { renderTimeline('all'); };
     </script>
 </body>
 </html>
