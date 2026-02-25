@@ -12,16 +12,15 @@
     <!-- Application Structure Plan: 
          האפליקציה בנויה כלוח בקרה אינטראקטיבי המחולק לחמישה אזורים: 
          1. לו"ז מפורט: ציר זמן ויזואלי עם מסננים.
-         2. מדריך שבוע 2: הרחבה על יעדי המדבר (רקע, אטרקציות, שעות).
+         2. מדריך שבוע 2: הרחבה על יעדי המדבר עם תמונות אמיתיות, רקע, אטרקציות ושעות.
          3. מפות ונתונים: חיבור למפות גוגל וניתוח שעות נהיגה.
          4. לוגיסטיקה: ריכוז הזמנות רכב ומלונות.
          5. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
     -->
     <!-- Visualization & Content Choices: 
+         - Images: החלפת הפלייסהולדרים בתמונות חיות מ-Unsplash.
          - Google Maps Link: יצירת URL מורכב לניווט אמיתי.
          - Destination Cards: כרטיסי מידע עשירים הכוללים רקע, שעות ופעילויות.
-         - Doughnut Chart: חלוקת סוגי הפעילות.
-         - Bar Chart: השוואת זמני נהיגה.
          CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <style>
@@ -70,16 +69,21 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .img-placeholder {
+        .dest-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        .img-fallback {
             background: #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #64748b;
-            font-size: 0.875rem;
             border-radius: 1rem;
-            height: 12rem;
-            margin-bottom: 1rem;
+            height: 100%;
             font-weight: bold;
         }
     </style>
@@ -137,7 +141,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8 flex-grow">
+    <main class="container mx-auto px-4 py-8 flex-grow text-right">
 
         <!-- VIEW 1: ITINERARY -->
         <div id="view-itinerary" class="view-section block animate-fade">
@@ -171,10 +175,11 @@
             <div class="space-y-16">
                 <!-- Las Vegas Card -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
-                    <div class="md:w-1/3">
-                        <div class="img-placeholder m-6 h-64 md:h-full">
-                            
-                        </div>
+                    <div class="md:w-1/3 p-6">
+                        <img src="https://images.unsplash.com/photo-1581351123004-757df051db8e?auto=format&fit=crop&w=800&q=80" 
+                             alt="Las Vegas" class="dest-image shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="img-fallback hidden h-64">תמונת לאס וגאס</div>
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-start mb-4">
@@ -209,11 +214,12 @@
                 </section>
 
                 <!-- Bryce Canyon Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
-                    <div class="md:w-1/3">
-                        <div class="img-placeholder m-6 h-64 md:h-full">
-                            
-                        </div>
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse text-right">
+                    <div class="md:w-1/3 p-6">
+                        <img src="https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80" 
+                             alt="Bryce Canyon" class="dest-image shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="img-fallback hidden h-64">תמונת ברייס קניון</div>
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-start mb-4">
@@ -248,11 +254,12 @@
                 </section>
 
                 <!-- Zion Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
-                    <div class="md:w-1/3">
-                        <div class="img-placeholder m-6 h-64 md:h-full">
-                            
-                        </div>
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row text-right">
+                    <div class="md:w-1/3 p-6">
+                        <img src="https://images.unsplash.com/photo-1533037233816-7788448ec620?auto=format&fit=crop&w=800&q=80" 
+                             alt="Zion" class="dest-image shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="img-fallback hidden h-64">תמונת פארק ציון</div>
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-start mb-4">
@@ -286,11 +293,12 @@
                 </section>
 
                 <!-- Antelope & Page Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
-                    <div class="md:w-1/3">
-                        <div class="img-placeholder m-6 h-64 md:h-full">
-                            
-                        </div>
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse text-right">
+                    <div class="md:w-1/3 p-6">
+                        <img src="https://images.unsplash.com/photo-1499244015948-ac750899999a?auto=format&fit=crop&w=800&q=80" 
+                             alt="Antelope Canyon" class="dest-image shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="img-fallback hidden h-64">תמונת אנטילופ קניון</div>
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-start mb-4">
@@ -325,11 +333,12 @@
                 </section>
 
                 <!-- Lake Havasu Card -->
-                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row">
-                    <div class="md:w-1/3">
-                        <div class="img-placeholder m-6 h-64 md:h-full">
-                            
-                        </div>
+                <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row text-right">
+                    <div class="md:w-1/3 p-6">
+                        <img src="https://images.unsplash.com/photo-1518385936353-887464a8527a?auto=format&fit=crop&w=800&q=80" 
+                             alt="Lake Havasu" class="dest-image shadow-md"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="img-fallback hidden h-64">תמונת לייק הבאסו</div>
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-start mb-4">
@@ -365,7 +374,7 @@
         </div>
 
         <!-- VIEW 3: MAP & STATS -->
-        <div id="view-stats" class="view-section hidden animate-fade">
+        <div id="view-stats" class="view-section hidden animate-fade text-right">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
                     <div class="flex items-center gap-4 mb-6">
@@ -412,7 +421,7 @@
         </div>
 
         <!-- VIEW 4: LOGISTICS -->
-        <div id="view-logistics" class="view-section hidden animate-fade">
+        <div id="view-logistics" class="view-section hidden animate-fade text-right">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
                     <div class="bg-slate-900 p-6 text-white flex justify-between items-center">
@@ -500,7 +509,7 @@
         </div>
 
         <!-- VIEW 5: GAMES -->
-        <div id="view-games" class="view-section hidden animate-fade">
+        <div id="view-games" class="view-section hidden animate-fade text-right">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center text-right">
                     <div class="text-5xl mb-4">🤫</div>
