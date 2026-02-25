@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המסע הגדול - קיץ 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Modern Adventure (Deep Blue, Sunset Orange, Desert Sand) -->
+    <!-- Application Structure Plan: 
+         האפליקציה בנויה כלוח בקרה אינטראקטיבי המחולק לארבעה אזורים: 
+         1. לו"ז מפורט: ציר זמן ויזואלי עם מסננים.
+         2. מפות ונתונים: חיבור למפות גוגל וניתוח שעות נהיגה.
+         3. לוגיסטיקה: ריכוז הזמנות רכב ומלונות.
+         4. משחקים וטיפים: תוכן ייעודי לנסיעות ארוכות.
+         הוספתי קישור ישיר ל-Google Maps כדי לפתור את בעיית המפה הלא-פעילה בגרסה הקודמת.
+    -->
+    <!-- Visualization & Content Choices: 
+         - Google Maps Link: יצירת URL מורכב הכולל את כל תחנות הטיול לצורך ניווט אמיתי.
+         - Doughnut Chart: חלוקת סוגי הפעילות (עירוני, טבע, נסיעות).
+         - Bar Chart: השוואת זמני נהיגה בין הימים האינטנסיביים.
+         - Timeline Cards: כרטיסים נקיים עם אייקונים משתנים לפי סוג היום.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        .tab-active {
+            border-bottom: 4px solid #f97316;
+            color: #f97316;
+            font-weight: 900;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            right: 1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        
+        .animate-fade {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <div class="container mx-auto px-6 py-10 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-right">
+                    <h1 class="text-5xl font-black mb-2 tracking-tight">ארה"ב 2026</h1>
+                    <p class="text-orange-400 text-xl font-light">קליפורניה • נבדה • יוטה • אריזונה</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-center border border-white/20">
+                        <span class="block text-3xl font-black">24</span>
+                        <span class="text-xs uppercase text-slate-300">ימים</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl text-center border border-white/20">
+                        <span class="block text-3xl font-black">5</span>
+                        <span class="text-xs uppercase text-slate-300">נוסעים</span>
+                    </div>
+                    <div class="bg-orange-500 px-6 py-3 rounded-2xl text-center shadow-lg">
+                        <span class="block text-3xl font-black">⚽</span>
+                        <span class="text-xs uppercase text-white font-bold">מונדיאל</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto no-scrollbar space-x-8 space-x-reverse">
+                <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn tab-active py-5 px-4 whitespace-nowrap transition-all">
+                    📅 תוכנית יומית
+                </button>
+                <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
+                    🌍 מפה ונתונים
+                </button>
+                <button onclick="switchTab('logistics')" id="tab-logistics" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
+                    📄 לוגיסטיקה
+                </button>
+                <button onclick="switchTab('games')" id="tab-games" class="tab-btn py-5 px-4 whitespace-nowrap transition-all">
+                    🕹️ לילדים בדרכים
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+
+        <!-- VIEW 1: ITINERARY -->
+        <div id="view-itinerary" class="view-section block animate-fade">
+            <div class="bg-blue-600 text-white p-8 rounded-3xl mb-8 shadow-xl">
+                <h2 class="text-3xl font-black mb-4">יומן המסע</h2>
+                <p class="text-blue-100 max-w-2xl text-lg">
+                    הטיול מחולק ל-3 פרקים: ההתאקלמות באנסינו, המסע הגדול למדבר (יוטה/וגאס), והפינאלה בסן דייגו. השתמשו במסננים כדי למצוא ימים ספציפיים.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <button onclick="filterItinerary('all')" class="bg-white text-blue-900 px-5 py-2 rounded-xl font-bold hover:bg-blue-50 transition">הכל</button>
+                    <button onclick="filterItinerary('travel')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🚗 נסיעה ארוכה</button>
+                    <button onclick="filterItinerary('nature')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🌲 פארקים וטבע</button>
+                    <button onclick="filterItinerary('urban')" class="bg-blue-500 text-white px-5 py-2 rounded-xl font-bold border border-blue-400 hover:bg-blue-400 transition">🏙️ עיר וקניות</button>
+                </div>
+            </div>
+
+            <div class="relative space-y-8" id="timeline-container">
+                <div class="timeline-line"></div>
+                <!-- JS Populates this -->
+            </div>
+        </div>
+
+        <!-- VIEW 2: MAP & STATS -->
+        <div id="view-stats" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Google Maps Card -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-green-100 p-3 rounded-2xl text-2xl">📍</div>
+                        <div>
+                            <h3 class="text-2xl font-black">מפת המסלול הרשמית</h3>
+                            <p class="text-slate-500">חיבור ישיר ל-Google Maps עם כל התחנות</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-50 rounded-2xl p-6 border-2 border-dashed border-slate-200 text-center mb-6">
+                        <p class="text-slate-600 mb-6 text-lg">
+                            כדי לנווט באמת, הכנו לכם קישור הכולל את כל המסלול: <br>
+                            <strong>לוס אנג'לס ← לאס וגאס ← קנאב ← פייג' ← לייק הבאסו ← לוס אנג'לס.</strong>
+                        </p>
+                        <a href="https://www.google.com/maps/dir/Los+Angeles,+CA/Las+Vegas,+NV/Kanab,+UT/Antelope+Canyon,+AZ/Lake+Havasu+City,+AZ/Encino,+Los+Angeles,+CA/" 
+                           target="_blank" 
+                           class="inline-flex items-center gap-3 bg-green-600 text-white px-8 py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition shadow-lg transform hover:scale-105">
+                            <span>פתיחת המסלול ב-Google Maps</span>
+                            <span>↗️</span>
+                        </a>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
+                        <div class="p-3 bg-slate-100 rounded-xl font-bold">1. לוס אנג'לס</div>
+                        <div class="p-3 bg-slate-100 rounded-xl font-bold">2. לאס וגאס</div>
+                        <div class="p-3 bg-slate-100 rounded-xl font-bold">3. יוטה (Zion)</div>
+                        <div class="p-3 bg-slate-100 rounded-xl font-bold">4. אריזונה</div>
+                    </div>
+                </div>
+
+                <!-- Activity Chart -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
+                    <h3 class="text-xl font-black mb-6 text-center">🎨 אופי הטיול</h3>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                    <p class="text-center text-slate-400 text-sm mt-6">אנחנו משלבים בין טבע פראי לבילוי עירוני מודרני.</p>
+                </div>
+
+                <!-- Drive Chart -->
+                <div class="lg:col-span-3 bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
+                    <h3 class="text-xl font-black mb-6 text-center">⏱️ מדד ה"עייפות": שעות נהיגה צפויות</h3>
+                    <div class="chart-container h-80">
+                        <canvas id="driveChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: LOGISTICS -->
+        <div id="view-logistics" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Car Reservation -->
+                <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
+                    <div class="bg-slate-900 p-6 text-white flex justify-between items-center">
+                        <h3 class="text-xl font-black italic">THRIFTY RENTAL</h3>
+                        <span class="bg-orange-500 px-3 py-1 rounded-full text-xs font-bold">LAX PICKUP</span>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div class="flex items-center gap-6">
+                            <div class="text-4xl">🚘</div>
+                            <div>
+                                <h4 class="font-black text-2xl">Nissan Pathfinder</h4>
+                                <p class="text-slate-500">או דומה (7 מקומות)</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-slate-400 text-xs uppercase">איסוף</span>
+                                <span class="font-bold">29/06 | 06:00</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-slate-400 text-xs uppercase">החזרה</span>
+                                <span class="font-bold">22/07 | 13:00</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-orange-50 border border-orange-100 rounded-2xl text-orange-900 text-sm">
+                            ⚠️ <strong>זכרו:</strong> עולים על השאטל הסגול (Purple Sign) מחוץ לטרמינל.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notes -->
+                <div class="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <span class="bg-yellow-100 p-2 rounded-xl">📝</span>
+                        <span>דברים שחשוב לזכור</span>
+                    </h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-500 mt-1">●</span>
+                            <p><strong>Antelope Canyon:</strong> הסיור ב-9/7 ב-10:00. חובה להגיע ב-09:20. אסור תיקים בכלל!</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-500 mt-1">●</span>
+                            <p><strong>יוטה:</strong> קנו את ה-National Park Pass בפארק הראשון (Zion). זה חוסך עשרות דולרים.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-500 mt-1">●</span>
+                            <p><strong>פיקדון רכב:</strong> ודאו שהמסגרת בכרטיס האשראי מאפשרת פיקדון של כ-$1,800.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hotel Table -->
+                <div class="md:col-span-2 bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100">
+                    <table class="w-full text-right">
+                        <thead class="bg-slate-900 text-white">
+                            <tr>
+                                <th class="p-5 font-black">תאריכים</th>
+                                <th class="p-5 font-black">יעד</th>
+                                <th class="p-5 font-black">מלון</th>
+                                <th class="p-5 font-black">סטטוס</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-5 font-bold">5/7 - 7/7</td>
+                                <td class="p-5">לאס וגאס</td>
+                                <td class="p-5 font-black text-blue-600">Mandalay Bay</td>
+                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-5 font-bold">7/7 - 9/7</td>
+                                <td class="p-5">קנאב (יוטה)</td>
+                                <td class="p-5 font-black text-orange-600">Best Western Red Hills</td>
+                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-5 font-bold">9/7 - 10/7</td>
+                                <td class="p-5">לייק הבאסו</td>
+                                <td class="p-5 font-black text-cyan-600">Holiday Inn Express</td>
+                                <td class="p-5"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">מאושר</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 4: GAMES -->
+        <div id="view-games" class="view-section hidden animate-fade">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-pink-500 text-center">
+                    <div class="text-5xl mb-4">🤫</div>
+                    <h3 class="text-2xl font-black mb-4">אני מביא למסיבה...</h3>
+                    <p class="text-slate-500 text-sm">משחק חשיבה מעולה: אחד בוחר חוק סודי, והשאר מנסים להיכנס למסיבה על ידי הצעת חפצים שמתאימים לחוק.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-indigo-500 text-center">
+                    <div class="text-5xl mb-4">🤡</div>
+                    <h3 class="text-2xl font-black mb-4">חי צומח דומם 2026</h3>
+                    <p class="text-slate-500 text-sm">החליפו את הקטגוריות לקטגוריות של הטיול: "משהו שראינו בחוץ", "שם של שחקן כדורגל", "אוכל שאכלנו".</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-orange-500 text-center">
+                    <div class="text-5xl mb-4">🎸</div>
+                    <h3 class="text-xl font-black mb-4">איזה שיר זה?</h3>
+                    <p class="text-slate-500 text-sm">השמיעו את השניות הראשונות של שיר ב-Spotify. הראשון שמזהה בוחר את השיר הבא!</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-slate-900 p-10 rounded-3xl text-white">
+                <h3 class="text-3xl font-black mb-8 text-center text-orange-400">טיפים אישיים לבנים</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="text-center">
+                        <span class="text-4xl block mb-4">🕶️</span>
+                        <h4 class="text-xl font-bold mb-2">אדם (17)</h4>
+                        <p class="text-slate-400 text-sm">בוגאס חפש את Area15 - זה המקום הכי "קול" לבני נוער בעולם.</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-4xl block mb-4">⚽</span>
+                        <h4 class="text-xl font-bold mb-2">אלון (14)</h4>
+                        <p class="text-slate-400 text-sm">חנות האוהדים ב-SoFi Stadium היא חובה. אל תשכח לצלם הכל!</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-4xl block mb-4">🎢</span>
+                        <h4 class="text-xl font-bold mb-2">איתן (10)</h4>
+                        <p class="text-slate-400 text-sm">ה-Narrows ב-Zion הוא מסלול שבו הולכים בתוך נהר. תתכונן להירטב!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-950 text-slate-500 py-10 text-center text-sm border-t border-slate-900">
+        <p>Command Center • Family Trip 2026 • © Ohad Rabinovich</p>
+    </footer>
+
+    <script>
+        const tripData = [
+            { date: "29/06", day: "שני", loc: "Encino", type: "travel", title: "נחיתה ב-LAX", desc: "איסוף הרכב, התארגנות באנסינו.", drive: 1.5 },
+            { date: "30/06", day: "שלישי", loc: "Encino", type: "urban", title: "קניות וג'ט-לג", desc: "Northridge Fashion Center.", drive: 0.5 },
+            { date: "01/07", day: "רביעי", loc: "Encino", type: "urban", title: "יוניברסל סטודיוס", desc: "יום מלא חוויות קולנועיות.", drive: 1 },
+            { date: "02/07", day: "חמישי", loc: "Encino", type: "urban", title: "⚽ מונדיאל 2026", desc: "משחק ב-SoFi Stadium - אירוע שיא!", drive: 1.5 },
+            { date: "03/07", day: "שישי", loc: "Encino", type: "urban", title: "חופי LA", desc: "סנטה מוניקה ווניס ביץ'. ארוחת שישי.", drive: 1 },
+            { date: "04/07", day: "שבת", loc: "Encino", type: "urban", title: "Independence Day", desc: "חגיגות ה-4 ביולי, מסיבה וזיקוקים.", drive: 0.5 },
+            { date: "05/07", day: "ראשון", loc: "Vegas", type: "travel", title: "נסיעה לוגאס", desc: "צ'ק אין במנדליי ביי, בריכת גלים.", drive: 4.5 },
+            { date: "06/07", day: "שני", loc: "Vegas", type: "urban", title: "The Sphere", desc: "מופע בבועה המפורסמת וסיבוב בסטריפ.", drive: 0.5 },
+            { date: "07/07", day: "שלישי", loc: "Utah", type: "nature", title: "נסיעה ליוטה", desc: "עצירה בברייס קניון לפני השינה בקנאב.", drive: 4.5 },
+            { date: "08/07", day: "רביעי", loc: "Utah", type: "nature", title: "פארק לאומי ציון", desc: "הליכה במים במסלול ה-Narrows.", drive: 1.5 },
+            { date: "09/07", day: "חמישי", loc: "Havasu", type: "nature", title: "Antelope Canyon", desc: "סיור ב-10:00, צילומים, נסיעה להבאסו.", drive: 4.5 },
+            { date: "10/07", day: "שישי", loc: "Encino", type: "travel", title: "חזרה לאנסינו", desc: "עצירה ב-London Bridge וחזרה לוואלי.", drive: 4.5 },
+            { date: "11/07", day: "שבת", loc: "Encino", type: "urban", title: "יום מנוחה", desc: "זמן משפחתי רגוע.", drive: 0.5 },
+            { date: "12/07", day: "ראשון", loc: "Encino", type: "urban", title: "הוליווד", desc: "גריפית', Walk of Fame.", drive: 1 },
+            { date: "13/07", day: "שני", loc: "San Diego", type: "travel", title: "סן דייגו", desc: "נסיעה דרומה, נושאת המטוסים Midway.", drive: 2.5 },
+            { date: "14/07", day: "שלישי", loc: "San Diego", type: "nature", title: "SeaWorld / Zoo", desc: "חוויית חיות וים.", drive: 0.5 },
+            { date: "15/07", day: "רביעי", loc: "Encino", type: "travel", title: "חזרה לוואלי", desc: "דרך כביש החוף (Laguna Beach).", drive: 2.5 },
+            { date: "16/07", day: "חמישי", loc: "Encino", type: "urban", title: "קניות אחרונות", desc: "Citadel Outlets.", drive: 1 },
+            { date: "17/07", day: "שישי", loc: "Encino", type: "urban", title: "מוזיאון המכוניות", desc: "ביקור במוזיאון Petersen.", drive: 1 },
+            { date: "18/07", day: "שבת", loc: "Encino", type: "urban", title: "מסיבת סיום", desc: "נפרדים מאמריקה.", drive: 0 },
+            { date: "19/07", day: "ראשון", loc: "Encino", type: "nature", title: "ים במאליבו", desc: "סגירה רגועה בחוף.", drive: 1 },
+            { date: "20/07", day: "שני", loc: "Encino", type: "urban", title: "השלמות", desc: "יום חופשי להשלמות אחרונות.", drive: 0.5 },
+            { date: "21/07", day: "שלישי", loc: "Encino", type: "urban", title: "Six Flags", desc: "רכבות הרים ב-Magic Mountain.", drive: 1 },
+            { date: "22/07", day: "רביעי", loc: "Fly", type: "travel", title: "טיסה הביתה", desc: "החזרת רכב ב-13:00.", drive: 1 }
+        ];
+
+        function renderTimeline(filter) {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '<div class="timeline-line"></div>';
+            
+            tripData.forEach((day, index) => {
+                if (filter !== 'all' && day.type !== filter) return;
+
+                const isLeft = index % 2 === 0;
+                let colorClass = 'bg-slate-400';
+                let icon = '📍';
+                if(day.type === 'travel') { colorClass = 'bg-orange-500'; icon = '🚗'; }
+                if(day.type === 'nature') { colorClass = 'bg-green-600'; icon = '🌲'; }
+                if(day.type === 'urban') { colorClass = 'bg-blue-600'; icon = '🏙️'; }
+
+                const item = document.createElement('div');
+                item.className = `relative z-10 flex items-center justify-between w-full mb-10 ${isLeft ? 'flex-row-reverse' : ''}`;
+                
+                item.innerHTML = `
+                    <div class="order-1 w-5/12 hidden md:block"></div>
+                    <div class="z-20 flex items-center order-1 ${colorClass} shadow-xl w-12 h-12 rounded-2xl justify-center text-white text-xl">
+                        ${icon}
+                    </div>
+                    <div class="order-1 bg-white rounded-3xl shadow-lg w-10/12 md:w-5/12 p-6 border-t-8 ${colorClass.replace('bg-', 'border-')}">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-black text-slate-900">${day.date}</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase">${day.day}</span>
+                        </div>
+                        <h3 class="font-black text-xl mb-2 text-slate-800">${day.title}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">${day.desc}</p>
+                        ${day.drive >= 2 ? `<div class="mt-3 text-xs font-black text-orange-600">⏱️ נסיעה: כ-${day.drive} שעות</div>` : ''}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+
+            if (tabId === 'stats' && !window.chartsInitialized) {
+                initCharts();
+                window.chartsInitialized = true;
+            }
+        }
+
+        function filterItinerary(type) {
+            renderTimeline(type);
+        }
+
+        function initCharts() {
+            const types = { travel: 0, nature: 0, urban: 0 };
+            tripData.forEach(d => types[d.type]++);
+
+            new Chart(document.getElementById('activityChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['נסיעה', 'טבע', 'עיר'],
+                    datasets: [{
+                        data: [types.travel, types.nature, types.urban],
+                        backgroundColor: ['#f97316', '#16a34a', '#2563eb'],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Heebo', weight: 'bold' } } } }
+                }
+            });
+
+            const driveDays = tripData.filter(d => d.drive >= 2.5);
+            new Chart(document.getElementById('driveChart'), {
+                type: 'bar',
+                data: {
+                    labels: driveDays.map(d => d.title),
+                    datasets: [{
+                        label: 'שעות נהיגה',
+                        data: driveDays.map(d => d.drive),
+                        backgroundColor: '#f97316',
+                        borderRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { display: false } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        window.onload = () => renderTimeline('all');
+    </script>
+</body>
+</html>
