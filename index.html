@@ -339,19 +339,46 @@
 
         <!-- Tab 5: WORLD CUP -->
         <div id="view-worldcup" class="view-section hidden animate-fade text-right text-right text-right">
-            <div class="worldcup-card mb-10 text-right">
+            <div class="worldcup-card mb-8 text-right">
                 <h2 class="text-4xl font-black mb-2 italic text-right">FIFA WORLD CUP 2026</h2>
-                <h3 class="text-xl text-orange-400 font-bold uppercase text-right">מעקב נבחרות</h3>
-                <p class="text-slate-400 mt-4 text-right">צפייה בטלוויזיה: ארגנטינה, ספרד, גרמניה ואנגליה.</p>
+                <h3 class="text-xl text-orange-400 font-bold uppercase text-right">מרכז המעקב הדינמי</h3>
+                <p class="text-slate-400 mt-2 text-right">עקבו אחרי הנבחרות האהובות עליכם, תוצאות ומשחקים קרובים.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-right">
-                <div class="match-card text-right">
-                    <span class="block font-black mb-2 text-right">02/07 | 12:00</span>
-                    <p class="text-sm text-slate-600 text-right">שלב 32 הגדולות (ספרד?)</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Upcoming Matches List -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div>
+                        <h4 class="text-2xl font-black mb-4 flex items-center gap-2">🔥 המשחקים הבאים</h4>
+                        <div id="upcoming-matches" class="space-y-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-2xl font-black mb-4 flex items-center gap-2">✅ תוצאות אחרונות</h4>
+                        <div id="past-matches" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
                 </div>
-                <div class="match-card text-right text-right">
-                    <span class="block font-black mb-2 text-right">03/07 | 15:00</span>
-                    <p class="text-sm text-slate-600 text-right">שלב 32 הגדולות (ארגנטינה?)</p>
+
+                <!-- Info Sidebar -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-100">
+                        <h4 class="font-black text-lg mb-4 underline decoration-orange-400 text-right">נבחרות במעקב:</h4>
+                        <div id="favorite-teams-container" class="flex flex-wrap gap-2 justify-end">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-lg text-right">
+                        <h4 class="font-black text-lg mb-3">📺 איפה רואים?</h4>
+                        <ul class="text-xs text-slate-400 space-y-2">
+                            <li>• <strong>בלוס אנג'לס:</strong> FOX, FS1, Telemundo.</li>
+                            <li>• <strong>בוגאס:</strong> ה-Sportsbooks במנדליי ביי (חוויה מטורפת!).</li>
+                            <li>• <strong>בדרכים:</strong> אפליקציית FOX Sports (נדרש VPN/מנוי מקומי).</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -584,14 +611,76 @@
             if(mi) document.getElementById('resultKm').innerText = Math.round(mi * 1.609) + "km";
         }
 
+        // --- WORLD CUP DYNAMIC LOGIC ---
+        const wcTeams = [
+            { id: 'ARG', name: 'ארגנטינה', flag: '🇦🇷' },
+            { id: 'ESP', name: 'ספרד', flag: '🇪🇸' },
+            { id: 'GER', name: 'גרמניה', flag: '🇩🇪' },
+            { id: 'ENG', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' }
+        ];
+
+        // Database of matches. Change 'status' to 'finished' and add scores to move them to results.
+        const wcMatches = [
+            { id: 1, date: '02/07/2026', time: '12:00', team1: 'ספרד', flag1: '🇪🇸', team2: 'קרואטיה', flag2: '🇭🇷', stage: 'שלב 32', status: 'upcoming', score1: null, score2: null, isFav: true },
+            { id: 2, date: '03/07/2026', time: '15:00', team1: 'ארגנטינה', flag1: '🇦🇷', team2: 'הולנד', flag2: '🇳🇱', stage: 'שלב 32', status: 'upcoming', score1: null, score2: null, isFav: true },
+            { id: 3, date: '05/07/2026', time: '18:00', team1: 'גרמניה', flag1: '🇩🇪', team2: 'אנגליה', flag2: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', stage: 'שמינית גמר', status: 'upcoming', score1: null, score2: null, isFav: true },
+            { id: 4, date: '29/06/2026', time: '12:00', team1: 'ארגנטינה', flag1: '🇦🇷', team2: 'פולין', flag2: '🇵🇱', stage: 'שלב הבתים', status: 'finished', score1: 2, score2: 0, isFav: true },
+            { id: 5, date: '30/06/2026', time: '15:00', team1: 'ספרד', flag1: '🇪🇸', team2: 'יפן', flag2: '🇯🇵', stage: 'שלב הבתים', status: 'finished', score1: 3, score2: 1, isFav: true }
+        ];
+
+        function renderWorldCup() {
+            const upcomingContainer = document.getElementById('upcoming-matches');
+            const pastContainer = document.getElementById('past-matches');
+            const teamsContainer = document.getElementById('favorite-teams-container');
+
+            if (!upcomingContainer) return;
+
+            // Render Favorite Teams
+            teamsContainer.innerHTML = wcTeams.map(t => `<span class="bg-slate-100 px-3 py-1 rounded-full text-sm font-bold border border-slate-200 text-slate-800">${t.flag} ${t.name}</span>`).join('');
+
+            // Render Upcoming Matches
+            const upcoming = wcMatches.filter(m => m.status === 'upcoming');
+            upcomingContainer.innerHTML = upcoming.map(m => `
+                <div class="bg-white p-4 rounded-2xl shadow-sm border-r-4 ${m.isFav ? 'border-orange-500' : 'border-slate-200'} flex justify-between items-center text-right">
+                    <div class="flex items-center gap-3 w-1/3 justify-end">
+                        <span class="font-bold text-sm md:text-lg text-slate-800">${m.team1}</span>
+                        <span class="text-2xl md:text-3xl">${m.flag1}</span>
+                    </div>
+                    <div class="text-center w-1/3">
+                        <span class="block font-black text-slate-800 text-sm md:text-base">${m.time} | ${m.date.substring(0,5)}</span>
+                        <span class="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">${m.stage}</span>
+                    </div>
+                    <div class="flex items-center gap-3 w-1/3 justify-start">
+                        <span class="text-2xl md:text-3xl">${m.flag2}</span>
+                        <span class="font-bold text-sm md:text-lg text-slate-800">${m.team2}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Finished Matches
+            const past = wcMatches.filter(m => m.status === 'finished');
+            pastContainer.innerHTML = past.map(m => `
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+                    <span class="text-[10px] text-slate-400 block mb-1">${m.date.substring(0,5)} - ${m.stage}</span>
+                    <div class="flex justify-center items-center gap-3">
+                        <span class="text-xl">${m.flag1}</span>
+                        <span class="font-black text-lg text-slate-800">${m.score1} - ${m.score2}</span>
+                        <span class="text-xl">${m.flag2}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         window.onload = () => {
             renderTimeline();
             renderParks();
             renderHotels();
             loadChecklist(); // טעינת המידע שנשמר
             updateCountdown();
+            renderWorldCup(); // הפעלת המונדיאל הדינמי
             setInterval(updateCountdown, 86400000); 
         };
     </script>
 </body>
+</html>
 </html>
