@@ -217,11 +217,14 @@
                     </div>
                     <div class="p-8 md:w-2/3">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-2xl font-black text-slate-800 text-right">יום ג' (7/7): יוטה וברייס קניון</h3>
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-2xl font-black text-slate-800 text-right">יום ג' (7/7): יוטה וברייס קניון</h3>
+                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold text-center border border-purple-200">⏰ יוטה: +1 שעה (Mountain Time)</span>
+                            </div>
                             <span class="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg">🌡️ ~26°C (קריר!)</span>
                         </div>
                         <div class="space-y-4">
-                            <div class="w2-segment"><span class="w2-label text-right">☀️ בוקר</span>עוזבים את וגאס ונוסעים צפונה לכיוון יוטה (מעבר זמן של שעה קדימה).</div>
+                            <div class="w2-segment"><span class="w2-label text-right">☀️ בוקר</span>עוזבים את וגאס ונוסעים צפונה לכיוון יוטה (זכרו, מאבדים שעה קדימה!).</div>
                             <div class="w2-segment"><span class="w2-label text-right">⛅ צהריים</span>ביקור בפארק ברייס קניון - תצפיות מ-Inspiration Point.</div>
                             <div class="w2-segment"><span class="w2-label text-right">🌙 ערב</span>צ'ק-אין במלון Best Western בקנאב ומנוחה.</div>
                         </div>
@@ -256,9 +259,14 @@
                         </div>
                     </div>
                     <div class="p-8 md:w-2/3">
-                        <h3 class="text-2xl font-black text-slate-800 mb-6 text-right">יום ה' (9/7): אנטילופ קניון ולינה בהבאסו</h3>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center gap-3">
+                                <h3 class="text-2xl font-black text-slate-800 text-right">יום ה' (9/7): אנטילופ קניון</h3>
+                                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold text-center border border-purple-200">⏰ פייג': כמו ב-LA (בלי שעון קיץ)</span>
+                            </div>
+                        </div>
                         <div class="space-y-4">
-                            <div class="w2-segment"><span class="w2-label">☀️ בוקר</span>סיור באנטילופ קניון (10:00 ב-Ken's Tours, התייצבות ב-09:20).</div>
+                            <div class="w2-segment"><span class="w2-label">☀️ בוקר</span>סיור באנטילופ קניון (10:00 ב-Ken's Tours, התייצבות ב-09:20. השעון חוזר שעה אחורה!).</div>
 							<p class="text-right"><strong>כרטיסים:</strong> <a href="https://klook.klktech.com/en-US/voucher-new/3568145c-18a5-4f5b-4c6f-7975699c9592?lang=en_US" target="_blank" class="text-blue-600 font-bold underline text-right">צפייה בשובר (Klook)</a></p>
                             <div class="w2-segment text-right"><span class="w2-label text-right">⛅ צהריים</span>ביקור ב-Horseshoe Bend המרשים.</div>
                             <div class="w2-segment font-black text-orange-600 text-right"><span class="w2-label text-right">🌙 ערב</span>נסיעה ללייק הבאסו ללינה ומנוחה בלבד.</div>
@@ -291,7 +299,7 @@
                 <p class="text-pink-100 max-w-2xl text-lg text-right italic">המדריך המלא לריגושים ורכבות הרים.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="parks-container">
-                <!-- Content same as previous version, but integrated here -->
+                <!-- Content logic for parks -->
             </div>
         </div>
 
@@ -299,49 +307,31 @@
         <div id="view-checklist" class="view-section hidden animate-fade text-right text-right">
             <div class="bg-emerald-600 text-white p-8 rounded-3xl mb-8 shadow-xl">
                 <h2 class="text-3xl font-black mb-2 text-right">✅ הכנות וציוד לטיול</h2>
-                <p class="text-emerald-100 max-w-2xl text-lg text-right">מה לארוז ומה לעשות לפני שטסים.</p>
+                <p class="text-emerald-100 max-w-2xl text-lg text-right">מה לארוז ומה לעשות לפני שטסים (הנתונים נשמרים בדפדפן).</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-100">
                     <h3 class="text-xl font-black mb-4 border-b pb-2 text-emerald-700 text-right">🎒 רשימת אריזה למדבר</h3>
-                    <div class="space-y-1">
-                        <label class="check-item">
-                            <input type="checkbox"> <span>כובע רחב שוליים וקרם הגנה (חובה!)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>נעליים להליכה במים (Zion Narrows)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>בגדי ים (וגאס וסן דייגו)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>סוודר קל/עליונית (לברייס הקריר)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>בקבוק מים רב פעמי (ליטר לפחות לכל אחד)</span>
-                        </label>
+                    <div class="space-y-1" id="pack-list">
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>כובע רחב שוליים וקרם הגנה (חובה!)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>נעליים להליכה במים (Zion Narrows)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>בגדי ים (וגאס וסן דייגו)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>סוודר קל/עליונית (לברייס הקריר)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>בקבוק מים רב פעמי לכל אחד</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>מתאמי חשמל לארה"ב</span></label>
                     </div>
                 </div>
 
                 <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-100">
                     <h3 class="text-xl font-black mb-4 border-b pb-2 text-emerald-700 text-right">📄 מסמכים וסידורים</h3>
-                    <div class="space-y-1">
-                        <label class="check-item">
-                            <input type="checkbox"> <span>ויזה / ESTA בתוקף לכולם</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>צילום דרכונים (פיזי ובענן)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>ביטוח נסיעות מקיף (כולל כדורגל)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>הזמנת מקומות לדיסנילנד (חובה!)</span>
-                        </label>
-                        <label class="check-item">
-                            <input type="checkbox"> <span>רישיון נהיגה בינלאומי (בתוקף)</span>
-                        </label>
+                    <div class="space-y-1" id="doc-list">
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>ויזה / ESTA בתוקף לכולם</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>צילום דרכונים (פיזי ובענן)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>ביטוח נסיעות מקיף (מומלץ ספורט אתגרי)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>הזמנת מקומות לדיסנילנד (חובה!)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>רישיון נהיגה בינלאומי ופלסטיק (לנהג)</span></label>
+                        <label class="check-item"><input type="checkbox" onchange="saveChecklist()"> <span>הורדת כרטיסי טיסה לטלפון (e-Tickets)</span></label>
                     </div>
                 </div>
             </div>
@@ -366,13 +356,14 @@
             </div>
         </div>
 
-        <!-- VIEW 5: LOGISTICS & CONVERTER -->
+        <!-- VIEW 6: LOGISTICS & CONVERTER -->
         <div id="view-logistics" class="view-section hidden animate-fade text-right text-right">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Converter Tool -->
+                <!-- Logistics Column -->
                 <div class="lg:col-span-1 space-y-6">
+                    <!-- Converter Tool -->
                     <div class="bg-indigo-900 text-white p-6 rounded-3xl shadow-xl">
-                        <h3 class="text-xl font-black mb-4 border-b border-white/20 pb-2 text-right">⚙️ מחשבון המרות מהיר</h3>
+                        <h3 class="text-xl font-black mb-4 border-b border-white/20 pb-2 text-right">⚙️ מחשבון המרות</h3>
                         <div class="space-y-4">
                             <div>
                                 <label class="text-[10px] uppercase font-bold text-indigo-300 block mb-1 text-right">פרנהייט (F) לצלזיוס (C)</label>
@@ -391,11 +382,33 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-lg text-right">
-                        <h3 class="text-2xl font-black mb-4 text-right">רכב (Thrifty) 🚐</h3>
+                    <!-- Flights Card (NEW) -->
+                    <div class="bg-sky-900 text-white p-6 rounded-3xl shadow-lg text-right">
+                        <h3 class="text-2xl font-black mb-4 border-b border-sky-700 pb-2">טיסות ✈️</h3>
+                        <p class="text-sky-300 font-bold mb-2">יש להשלים חברת תעופה</p>
+                        <p class="text-xs mb-1">🛫 המראה מת"א: --/--/----</p>
+                        <p class="text-xs mb-4">🛬 נחיתה ב-LAX: 29/06 06:00</p>
+                        <p class="text-xs mb-1">🛫 המראה מ-LAX: 22/07 (צהריים/ערב)</p>
+                        <p class="text-xs">🛬 נחיתה בת"א: --/--/----</p>
+                    </div>
+
+                    <!-- Car Card -->
+                    <div class="bg-slate-900 text-white p-6 rounded-3xl shadow-lg text-right">
+                        <h3 class="text-2xl font-black mb-4 border-b border-slate-700 pb-2">רכב (Thrifty) 🚐</h3>
                         <p class="text-orange-400 font-bold mb-2 text-right">Nissan Pathfinder</p>
                         <p class="text-xs text-right">איסוף: 29/06 06:00 (LAX)</p>
-                        <p class="text-xs text-right">החזרה: 22/07 13:00 (LAX)</p>
+                        <p class="text-xs text-right mb-2">החזרה: 22/07 13:00 (LAX)</p>
+                        <p class="text-[10px] text-slate-400 italic">שולם ביטוח $432. לתשלום בדלפק: $1,779.59.</p>
+                    </div>
+
+                    <!-- Emergency Contacts (NEW) -->
+                    <div class="bg-red-50 p-6 rounded-3xl shadow-lg border border-red-100 text-right">
+                        <h3 class="text-xl font-black mb-3 text-red-700 border-b border-red-200 pb-2">☎️ מספרי חירום</h3>
+                        <ul class="text-sm space-y-2 text-slate-700">
+                            <li><strong>חירום ארה"ב:</strong> 911</li>
+                            <li><strong>מוקד ביטוח נסיעות:</strong> (להשלים)</li>
+                            <li><strong>קונסוליה (LA):</strong> +1-323-852-5500</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -419,15 +432,15 @@
         const tripData = [
             { date: "29/06", day: "שני", type: "travel", title: "נחיתה ב-LAX", desc: "איסוף רכב והתארגנות באנסינו." },
             { date: "30/06", day: "שלישי", type: "urban", title: "קניות וג'ט-לג", desc: "Northridge Fashion Center." },
-            { date: "01/07", day: "רביעי", type: "urban", title: "Universal Studios", desc: "יום שלם ביוניברסל." },
-            { date: "02/07", day: "חמישי", type: "urban", title: "יום שקט בבית", desc: "שלב ה-32 (ספרד?). צפייה בבית." },
+            { date: "01/07", day: "רביעי", type: "urban", title: "Universal Studios", desc: "יום מלא חוויות ביוניברסל." },
+            { date: "02/07", day: "חמישי", type: "urban", title: "יום שקט בבית", desc: "מונדיאל בטלוויזיה (ספרד?)." },
             { date: "03/07", day: "שישי", type: "urban", title: "יום שקט בבית", desc: "סנטה מוניקה וצפייה בארגנטינה." },
             { date: "04/07", day: "שבת", type: "urban", title: "4th of July", desc: "חגיגות בלוס אנג'לס וזיקוקים." },
             { date: "05/07", day: "ראשון", type: "travel", title: "נסיעה לוגאס", desc: "התחלת המסע למדבר.", stay: "Mandalay Bay" },
-            { date: "06/07", day: "שני", type: "urban", title: "אטרקציות ווגאס", desc: "?בריכות המלון והכדור החדש.", stay: "Mandalay Bay" },
+            { date: "06/07", day: "שני", type: "urban", title: "אטרקציות ווגאס", desc: "בריכות המלון והכדור החדש.", stay: "Mandalay Bay" },
             { date: "07/07", day: "שלישי", type: "nature", title: "ברייס קניון", desc: "נסיעה ליוטה ותצפיות בברייס.", stay: "Best Western Kanab" },
             { date: "08/07", day: "רביעי", type: "nature", title: "פארק ציון (The Narrows)", desc: "יום רטוב ומרגש בציון.", stay: "Best Western Kanab" },
-            { date: "09/07", day: "חמישי", type: "nature", title: "אנטילופ ולינה בהבאסו", desc: "סיור ב-10:00 ונסיעה לשינה בלבד.", stay: "Holiday Inn Havasu" },
+            { date: "09/07", day: "חמישי", type: "nature", title: "אנטילופ ושינה בהבאסו", desc: "סיור ב-10:00 ונסיעה לשינה בלבד.", stay: "Holiday Inn Havasu" },
             { date: "10/07", day: "שישי", type: "travel", title: "יהושע טרי וחזרה", desc: "ביקור ב-Joshua Tree וחזרה לאנסינו." },
             { date: "11/07", day: "שבת", type: "urban", title: "יום שקט בבית", desc: "יום שקט בבית." },
             { date: "12/07", day: "ראשון", type: "urban", title: "יום שקט בבית", desc: "יום שקט בבית." },
@@ -527,6 +540,26 @@
             });
         }
 
+        // --- CHECKLIST PERSISTENCE (LocalStorage) ---
+        function saveChecklist() {
+            try {
+                const checks = [];
+                document.querySelectorAll('.check-item input').forEach((cb, i) => checks[i] = cb.checked);
+                localStorage.setItem('tripChecklist', JSON.stringify(checks));
+            } catch (e) { console.log('Storage not available'); }
+        }
+
+        function loadChecklist() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('tripChecklist'));
+                if (saved) {
+                    document.querySelectorAll('.check-item input').forEach((cb, i) => {
+                        if (saved[i]) cb.checked = true;
+                    });
+                }
+            } catch (e) { console.log('Storage not available'); }
+        }
+
         function updateCountdown() {
             const target = new Date('June 29, 2026 06:00:00').getTime();
             const now = new Date().getTime();
@@ -555,8 +588,9 @@
             renderTimeline();
             renderParks();
             renderHotels();
+            loadChecklist(); // טעינת המידע שנשמר
             updateCountdown();
-            setInterval(updateCountdown, 86400000); // Daily update
+            setInterval(updateCountdown, 86400000); 
         };
     </script>
 </body>
