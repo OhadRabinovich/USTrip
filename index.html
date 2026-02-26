@@ -134,22 +134,21 @@
     <main class="container mx-auto px-4 py-8 flex-grow">
 
         <!-- Tab 1: SIMPLE ITINERARY -->
-        <div id="view-itinerary" class="view-section block animate-fade">
-            <div class="bg-blue-600 text-white p-8 rounded-3xl mb-8 shadow-xl text-right">
+        <div id="view-itinerary" class="view-section block animate-fade text-right">
+            <div class="bg-blue-600 text-white p-8 rounded-3xl mb-8 shadow-xl">
                 <h2 class="text-3xl font-black mb-4">יומן המסע</h2>
                 <p class="text-blue-100 max-w-2xl text-lg">תוכנית מלאה לכל 24 ימי הטיול.</p>
             </div>
             <div class="relative space-y-8" id="timeline-container">
                 <div class="timeline-line"></div>
-                <!-- Populated by JS -->
             </div>
         </div>
 
         <!-- Tab 2: DETAILED WEEK 2 GUIDE -->
         <div id="view-week2" class="view-section hidden animate-fade text-right">
             <div class="bg-orange-500 text-white p-8 rounded-3xl mb-12 shadow-xl">
-                <h2 class="text-3xl font-black mb-4 text-right">מדריך שבוע 2: המסע למדבר</h2>
-                <p class="text-orange-100 max-w-2xl text-lg text-right">פירוט עומק ברמת בוקר, צהריים וערב עבור ימי המדבר.</p>
+                <h2 class="text-3xl font-black mb-4">מדריך שבוע 2: המסע למדבר</h2>
+                <p class="text-orange-100 max-w-2xl text-lg">פירוט עומק ברמת בוקר, צהריים וערב עבור ימי המדבר.</p>
             </div>
 
             <div class="space-y-16">
@@ -244,7 +243,7 @@
                 <!-- 10/7 - Joshua Tree -->
                 <section class="bg-white rounded-3xl shadow-lg overflow-hidden border border-slate-100 flex flex-col md:flex-row-reverse">
                     <div class="md:w-1/3 p-6">
-						<img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwerARlPTY6dSLrd3mdGs-AtIhzSIXKe8rCFSCooDL0oWUzKkTQrZqn3Hxbg1_p6N1nR7F6fQevCyeHsQm5OLL4zD0GKWW9f-guzJItsG-5UbtrRMc0U-_BMW81C-7q5qvwoeueo=s680-w680-h510-rw" alt="אנטילופ" class="dest-image">
+						<img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAwerARlPTY6dSLrd3mdGs-AtIhzSIXKe8rCFSCooDL0oWUzKkTQrZqn3Hxbg1_p6N1nR7F6fQevCyeHsQm5OLL4zD0GKWW9f-guzJItsG-5UbtrRMc0U-_BMW81C-7q5qvwoeueo=s680-w680-h510-rw" alt="יהושע טרי" class="dest-image">
                         <div class="img-overlay-text text-center">Joshua Tree</div>
                     </div>
                     <div class="p-8 md:w-2/3">
@@ -261,10 +260,10 @@
 
         <!-- VIEW 3: WORLD CUP -->
         <div id="view-worldcup" class="view-section hidden animate-fade text-right">
-            <div class="worldcup-card mb-10 text-right">
+            <div class="worldcup-card mb-10">
                 <h2 class="text-4xl font-black mb-2 italic">FIFA WORLD CUP 2026</h2>
                 <h3 class="text-xl text-orange-400 font-bold uppercase">מעקב נבחרות</h3>
-                <p class="text-slate-400 mt-4 text-right">צפייה בטלוויזיה: ארגנטינה, ספרד, גרמניה ואנגליה.</p>
+                <p class="text-slate-400 mt-4">צפייה בטלוויזיה: ארגנטינה, ספרד, גרמניה ואנגליה.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="match-card">
@@ -282,8 +281,8 @@
         <div id="view-stats" class="view-section hidden animate-fade text-center">
             <div class="bg-white p-10 rounded-3xl shadow-lg border border-slate-100 flex flex-col items-center">
                 <span class="text-6xl mb-6">📍</span>
-                <h3 class="text-2xl font-black mb-4 text-center">מפת הטיול המלאה</h3>
-                <p class="text-slate-500 mb-8 text-center">כולל את יהושע טרי וכל נקודות העניין במדבר.</p>
+                <h3 class="text-2xl font-black mb-4">מפת הטיול המלאה</h3>
+                <p class="text-slate-500 mb-8">כולל את יהושע טרי וכל נקודות העניין במדבר.</p>
                 <a href="https://www.google.com/maps/dir/Los+Angeles,+CA/Las+Vegas,+NV/Kanab,+UT/Antelope+Canyon,+AZ/Joshua+Tree+National+Park,+CA/Encino,+Los+Angeles,+CA/" target="_blank" class="bg-green-600 text-white px-10 py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition shadow-lg transform hover:scale-105">פתיחת Google Maps</a>
             </div>
         </div>
@@ -291,24 +290,87 @@
         <!-- VIEW 5: LOGISTICS -->
         <div id="view-logistics" class="view-section hidden animate-fade text-right">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
-                    <h3 class="text-2xl font-black mb-6 text-right">בתי מלון מוזמנים 🏨</h3>
-                    <table class="w-full text-right text-sm">
-                        <thead class="bg-slate-900 text-white">
-                            <tr><th class="p-3">תאריכים</th><th class="p-3 text-right">מלון</th><th class="p-3">סטטוס</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr><td class="p-3">5-7/7</td><td class="p-3 font-bold text-right text-orange-600">Mandalay Bay (Vegas)</td><td class="p-3">✅</td></tr>
-                            <tr><td class="p-3">7-9/7</td><td class="p-3 font-bold text-right text-orange-600">Best Western (Kanab)</td><td class="p-3">✅</td></tr>
-                            <tr><td class="p-3">9-10/7</td><td class="p-3 font-bold text-right text-orange-600">Holiday Inn (Havasu)</td><td class="p-3">✅</td></tr>
-                            <tr class="bg-blue-50"><td class="p-3">16-17/7</td><td class="p-3 font-bold text-right text-blue-600">Homewood Suites (San Diego)</td><td class="p-3">✅</td></tr>
-                        </tbody>
-                    </table>
+                <!-- Detailed Hotel Cards -->
+                <div class="space-y-6">
+                    <h3 class="text-3xl font-black text-slate-800 mb-6">בתי מלון מוזמנים 🏨</h3>
+                    
+                    <!-- Mandalay Bay -->
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border-r-8 border-orange-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-xl font-black">Mandalay Bay (Las Vegas)</h4>
+                            <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">5-7 ביולי</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+                            <p><strong>🏠 הזמנה:</strong> Non-Smoking Room (Strip View suggested)</p>
+                            <p><strong>🍽️ אוכל:</strong> ללא ארוחת בוקר (מבחר ענק במלון)</p>
+                            <p><strong>📞 טלפון:</strong> <a href="tel:+17026327777" class="text-blue-600">+1 702-632-7777</a></p>
+                            <p><strong>📍 כתובת:</strong> <a href="https://waze.com/ul?q=Mandalay+Bay+Las+Vegas" target="_blank" class="text-orange-600 font-bold underline">ניווט ב-Waze</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Best Western -->
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border-r-8 border-orange-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-xl font-black">Best Western Red Hills (Kanab)</h4>
+                            <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">7-9 ביולי</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+                            <p><strong>🏠 הזמנה:</strong> Family Room / Two Queen Beds</p>
+                            <p><strong>🍽️ אוכל:</strong> ארוחת בוקר כלולה</p>
+                            <p><strong>📞 טלפון:</strong> <a href="tel:+14356442400" class="text-blue-600">+1 435-644-2400</a></p>
+                            <p><strong>📍 כתובת:</strong> <a href="https://waze.com/ul?q=Best+Western+Red+Hills+Kanab" target="_blank" class="text-orange-600 font-bold underline">ניווט ב-Waze</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Holiday Inn -->
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border-r-8 border-orange-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-xl font-black">Holiday Inn Express (Lake Havasu)</h4>
+                            <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">9-10 ביולי</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+                            <p><strong>🏠 הזמנה:</strong> Non-Smoking Two Queen Suite</p>
+                            <p><strong>🍽️ אוכל:</strong> ארוחת בוקר כלולה</p>
+                            <p><strong>📞 טלפון:</strong> <a href="tel:+19287336388" class="text-blue-600">+1 928-733-6388</a></p>
+                            <p><strong>📍 כתובת:</strong> <a href="https://waze.com/ul?q=Holiday+Inn+Express+Lake+Havasu" target="_blank" class="text-orange-600 font-bold underline">ניווט ב-Waze</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Homewood Suites (SD) -->
+                    <div class="bg-white p-6 rounded-3xl shadow-lg border-r-8 border-blue-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-xl font-black">Homewood Suites by Hilton (San Diego)</h4>
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">16-17 ביולי</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+                            <p><strong>🏠 הזמנה:</strong> 2 Bedroom Suite (2 King Beds)</p>
+                            <p><strong>🍽️ אוכל:</strong> ארוחת בוקר כלולה במחיר</p>
+                            <p><strong>📞 טלפון:</strong> <a href="tel:+16192220500" class="text-blue-600">+1 619-222-0500</a></p>
+                            <p><strong>📍 כתובת:</strong> <a href="https://waze.com/ul?q=2576+Laning+Road+San+Diego" target="_blank" class="text-blue-600 font-bold underline">ניווט ב-Waze</a></p>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-slate-100">
+                            <p class="text-[10px] text-slate-400"><strong>מספר הזמנה (Booking.com):</strong> שולם מראש</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-lg">
-                    <h3 class="text-2xl font-black mb-4">רכב שכור 🚐</h3>
-                    <p class="text-orange-400 font-bold mb-2">Nissan Pathfinder (7 seats)</p>
-                    <p class="text-sm">איסוף: 29/06 06:00 (LAX) | החזרה: 22/07 13:00 (LAX)</p>
+
+                <!-- Car Logistics -->
+                <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-lg self-start sticky top-24">
+                    <h3 class="text-2xl font-black mb-6">רכב שכור (Thrifty) 🚐</h3>
+                    <div class="space-y-4">
+                        <p class="text-orange-400 font-bold text-xl">Nissan Pathfinder (7 seats)</p>
+                        <div class="bg-white/10 p-4 rounded-2xl">
+                            <p class="text-sm font-bold mb-1">📅 איסוף (LAX):</p>
+                            <p class="text-lg">29 ביוני, 06:00</p>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-2xl">
+                            <p class="text-sm font-bold mb-1">📅 החזרה (LAX):</p>
+                            <p class="text-lg">22 ביולי, 13:00</p>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-4 leading-relaxed italic">
+                            * מומלץ לוודא רישיון נהיגה בתוקף (כולל פלסטיק) וכרטיס אשראי על שם השוכר הראשי.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -328,7 +390,7 @@
             { date: "03/07", day: "שישי", type: "urban", title: "יום שקט בבית", desc: "סנטה מוניקה וצפייה בארגנטינה." },
             { date: "04/07", day: "שבת", type: "urban", title: "4th of July", desc: "חגיגות בלוס אנג'לס וזיקוקים." },
             { date: "05/07", day: "ראשון", type: "travel", title: "נסיעה לוגאס", desc: "התחלת המסע למדבר.", stay: "Mandalay Bay" },
-            { date: "06/07", day: "שני", type: "urban", title: "אטרקציות ווגאס", desc: "?בריכות המלון והכדור החדש.", stay: "Mandalay Bay" },
+            { date: "06/07", day: "שני", type: "urban", title: "אטרקציות ווגאס", desc: "בריכות המלון והכדור החדש.", stay: "Mandalay Bay" },
             { date: "07/07", day: "שלישי", type: "nature", title: "ברייס קניון", desc: "נסיעה ליוטה ותצפיות בברייס.", stay: "Best Western Kanab" },
             { date: "08/07", day: "רביעי", type: "nature", title: "פארק ציון (The Narrows)", desc: "יום רטוב ומרגש בציון.", stay: "Best Western Kanab" },
             { date: "09/07", day: "חמישי", type: "nature", title: "אנטילופ ולינה בהבאסו", desc: "סיור ב-10:00 ונסיעה לשינה בלבד.", stay: "Holiday Inn Havasu" },
@@ -367,14 +429,14 @@
                     <div class="z-20 flex items-center order-1 ${colorClass} shadow-xl w-10 h-10 rounded-full justify-center text-white text-lg">
                         ${icon}
                     </div>
-                    <div class="order-1 bg-white rounded-3xl shadow-lg w-11/12 md:w-5/12 p-6 border-t-8 ${colorClass.replace('bg-', 'border-')}">
-                        <div class="flex justify-between items-center mb-1 text-right">
+                    <div class="order-1 bg-white rounded-3xl shadow-lg w-11/12 md:w-5/12 p-6 border-t-8 ${colorClass.replace('bg-', 'border-')} text-right">
+                        <div class="flex justify-between items-center mb-1">
                             <span class="font-black text-slate-900">${day.date}</span>
                             <span class="text-[10px] font-bold text-slate-400 uppercase">${day.day}</span>
                         </div>
-                        <h3 class="font-black text-lg mb-1 text-slate-800 text-right">${day.title}</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed text-right">${day.desc}</p>
-                        ${day.stay ? `<div class="mt-3 text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-left inline-block">🏨 לינה: ${day.stay}</div>` : ''}
+                        <h3 class="font-black text-lg mb-1 text-slate-800">${day.title}</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">${day.desc}</p>
+                        ${day.stay ? `<div class="mt-3 text-[10px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-block">🏨 לינה: ${day.stay}</div>` : ''}
                     </div>
                 `;
                 container.appendChild(item);
